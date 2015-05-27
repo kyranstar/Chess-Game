@@ -2,9 +2,6 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.Queue;
 
 import javax.swing.JFrame;
@@ -41,17 +38,14 @@ public class MainGame extends GameLoop {
 
 		final MainGame game = new MainGame(60, 60, new GameRenderer(panel));
 		panel.addMouseListener(game);
-		panel.addKeyListener(game);
-		panel.addMouseWheelListener(game);
+		panel.addMouseMotionListener(game);
 
 		return game;
 	}
 
 	@Override
-	public void processInput(final Queue<KeyEvent> keyEvents,
-			final Queue<MouseEvent> mouseEvents,
-			final Queue<MouseWheelEvent> mouseWheelEvents) {
-		renderer.processInput(keyEvents, mouseEvents, mouseWheelEvents);
+	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
+		renderer.processInput(mouseEvents);
 	}
 
 	@Override

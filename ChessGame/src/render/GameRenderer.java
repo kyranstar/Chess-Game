@@ -1,15 +1,20 @@
 package render;
 
 import game.Game;
+import helper.Logger;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.Queue;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+
+import main.GameLoop.MouseEventType;
+import main.GameLoop.MouseEventWithType;
 
 public class GameRenderer {
 	public static String GAME_TITLE = "Chess Game by Ben Zabback and Kyran Adams";
@@ -17,7 +22,7 @@ public class GameRenderer {
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 600;
 
-	private static final int CHESSBOARD_SIDE_LENGTH = 13;
+	private static final int CHESSBOARD_SIDE_LENGTH = 8;
 
 	private static final int TILE_WIDTH = WIDTH / CHESSBOARD_SIDE_LENGTH;
 	private static final int TILE_HEIGHT = HEIGHT / CHESSBOARD_SIDE_LENGTH;
@@ -30,10 +35,42 @@ public class GameRenderer {
 		game = new Game();
 	}
 
-	public void processInput(final Queue<KeyEvent> keyEvents,
-			final Queue<MouseEvent> mouseEvents,
-			final Queue<MouseWheelEvent> mouseWheelEvents) {
+	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
+		for (final MouseEventWithType eventWithType : mouseEvents) {
+			final MouseEvent event = eventWithType.event;
+			if (SwingUtilities.isLeftMouseButton(event)) {
+				handleLeftMouseEvent(eventWithType);
+			}
+			// Handle right click menu
+			if (event.isPopupTrigger()) {
+				final JPopupMenu menu = new ChessPopupMenu();
+				menu.show(event.getComponent(), event.getX(), event.getY());
+			}
+		}
+	}
 
+	private void handleLeftMouseEvent(final MouseEventWithType eventWithType) {
+		final MouseEventType type = eventWithType.type;
+		final MouseEvent event = eventWithType.event;
+		final Point tile = getTileFromScreen(event.getPoint());
+		// Return if out of bounds event
+		if (tile.x >= CHESSBOARD_SIDE_LENGTH || tile.x < 0
+				|| tile.y >= CHESSBOARD_SIDE_LENGTH || tile.y < 0) {
+			return;
+		}
+		Logger.info("Mouse event in tile " + tile + " with type " + type);
+
+		if (type == MouseEventType.PRESS) {
+
+		} else if (type == MouseEventType.DRAG) {
+
+		} else if (type == MouseEventType.RELEASE) {
+
+		}
+	}
+
+	private static Point getTileFromScreen(final Point p) {
+		return new Point(p.x / TILE_WIDTH, p.y / TILE_HEIGHT);
 	}
 
 	public void update() {
@@ -42,8 +79,13 @@ public class GameRenderer {
 
 	public void draw() {
 		final Graphics2D g = (Graphics2D) panel.getGraphics();
-		g.setColor(Color.BLUE);
-		g.fillRect(10, 10, 200, 200);
-		g.dispose();
+		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
+			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+				final boolean white = x % 2 == 1 ^ y % 2 == 1;
+				g.setColor(white ? Color.WHITE : Color.BLACK);
+				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH,
+						TILE_HEIGHT);
+			}
+		}
 	}
 }

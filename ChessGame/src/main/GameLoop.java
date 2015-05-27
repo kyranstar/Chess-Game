@@ -1,16 +1,12 @@
 package main;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public abstract class GameLoop implements KeyListener, MouseListener,
-MouseWheelListener {
+public abstract class GameLoop implements MouseListener, MouseMotionListener {
 	private int UPDATES_PER_SECOND;
 	private int FRAMES_PER_SECOND;
 	private boolean running = true;
@@ -18,9 +14,7 @@ MouseWheelListener {
 	private long targetUpdateTime;
 
 	// ArrayDeque is supposed to be the fastest collection
-	private final Queue<KeyEvent> keyEvents = new ArrayDeque<>();
-	private final Queue<MouseEvent> mouseEvents = new ArrayDeque<>();
-	private final Queue<MouseWheelEvent> mouseWheelEvents = new ArrayDeque<>();
+	private final Queue<MouseEventWithType> mouseEvents = new ArrayDeque<>();
 
 	private long runningFPS;
 
@@ -51,15 +45,10 @@ MouseWheelListener {
 		while (running) {
 			start = System.nanoTime();
 
-			synchronized (keyEvents) {
-				synchronized (mouseEvents) {
-					synchronized (mouseWheelEvents) {
-						processInput(keyEvents, mouseEvents, mouseWheelEvents);
-						mouseEvents.clear();
-						keyEvents.clear();
-						mouseWheelEvents.clear();
-					}
-				}
+			synchronized (mouseEvents) {
+				processInput(mouseEvents);
+				mouseEvents.clear();
+
 			}
 
 			if (System.currentTimeMillis() > lastUpdateTime + targetUpdateTime) {
@@ -101,9 +90,8 @@ MouseWheelListener {
 		running = false;
 	}
 
-	public abstract void processInput(final Queue<KeyEvent> keyEvents,
-			final Queue<MouseEvent> mouseEvents,
-			final Queue<MouseWheelEvent> mouseWheelEvents);
+	public abstract void processInput(
+			final Queue<MouseEventWithType> mouseEvents);
 
 	public abstract void update();
 
@@ -112,64 +100,64 @@ MouseWheelListener {
 	@Override
 	public void mouseClicked(final MouseEvent e) {
 		synchronized (mouseEvents) {
-			mouseEvents.add(e);
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.CLICK));
 		}
 	}
 
 	@Override
 	public void mouseEntered(final MouseEvent e) {
 		synchronized (mouseEvents) {
-			mouseEvents.add(e);
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.ENTER));
 		}
 	}
 
 	@Override
 	public void mouseExited(final MouseEvent e) {
 		synchronized (mouseEvents) {
-			mouseEvents.add(e);
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.EXIT));
 		}
 	}
 
 	@Override
 	public void mousePressed(final MouseEvent e) {
 		synchronized (mouseEvents) {
-			mouseEvents.add(e);
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.PRESS));
 		}
 	}
 
 	@Override
 	public void mouseReleased(final MouseEvent e) {
 		synchronized (mouseEvents) {
-			mouseEvents.add(e);
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.RELEASE));
 		}
 	}
 
 	@Override
-	public void keyPressed(final KeyEvent e) {
-		synchronized (keyEvents) {
-			keyEvents.add(e);
+	public void mouseDragged(final MouseEvent e) {
+		synchronized (mouseEvents) {
+			mouseEvents.add(new MouseEventWithType(e, MouseEventType.DRAG));
 		}
 	}
 
 	@Override
-	public void keyReleased(final KeyEvent e) {
-		synchronized (keyEvents) {
-			keyEvents.add(e);
-		}
+	public void mouseMoved(final MouseEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	@Override
-	public void keyTyped(final KeyEvent e) {
-		synchronized (keyEvents) {
-			keyEvents.add(e);
-
-		}
+	public static enum MouseEventType {
+		PRESS, RELEASE, CLICK, EXIT, ENTER, DRAG;
 	}
 
-	@Override
-	public void mouseWheelMoved(final MouseWheelEvent e) {
-		synchronized (mouseWheelEvents) {
-			mouseWheelEvents.add(e);
+	public static class MouseEventWithType {
+		public MouseEvent event;
+		public MouseEventType type;
+
+		public MouseEventWithType(final MouseEvent event,
+				final MouseEventType type) {
+			this.event = event;
+			this.type = type;
 		}
+
 	}
 }
