@@ -14,7 +14,7 @@ public class GamePiece {
 	public boolean isLegalMove(Point start, Point end,
 			boolean isKillingOtherPiece) {
 		int dx = end.y - start.y;
-		ind dy = end.x - start.x;
+		int dy = end.x - start.x;
 
 		switch (type) {
 		case 0: // pawn
@@ -30,6 +30,8 @@ public class GamePiece {
 			return (dy == dx) || ((dy >= 1 && dx == 0) || (dx >= 1 && dy == 0));
 		case 5:
 			return (dy <= 1 && dx <= 1);
+		default:
+			return false;
 		}
 	}
 
