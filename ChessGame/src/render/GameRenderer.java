@@ -32,7 +32,8 @@ public class GameRenderer {
 
 	public GameRenderer(final JPanel panel) {
 		this.panel = panel;
-		game = new Game();
+		game = new Game(); // What should are target fps be? must be passed to
+							// game constructor
 	}
 
 	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
@@ -50,6 +51,8 @@ public class GameRenderer {
 	}
 
 	private void handleLeftMouseEvent(final MouseEventWithType eventWithType) {
+		Point p1 = null;
+		Point p2 = null;
 		final MouseEventType type = eventWithType.type;
 		final MouseEvent event = eventWithType.event;
 		final Point tile = getTileFromScreen(event.getPoint());
@@ -61,11 +64,18 @@ public class GameRenderer {
 		Logger.info("Mouse event in tile " + tile + " with type " + type);
 
 		if (type == MouseEventType.PRESS) {
-
+			p1 = event.getPoint();
 		} else if (type == MouseEventType.DRAG) {
 
 		} else if (type == MouseEventType.RELEASE) {
-
+			p2 = event.getPoint();
+		}
+		if (p1 != null && p2 != null) { // if first and last points have been
+										// entered, move piece and clear p1 and
+										// p2
+			if (!game.move(p1, p2)) {
+				System.out.println("Invalid move");
+			}
 		}
 	}
 

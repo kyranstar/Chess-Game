@@ -12,7 +12,6 @@ public abstract class GameLoop implements MouseListener, MouseMotionListener {
 	private boolean running = true;
 	private long targetDrawTime;
 	private long targetUpdateTime;
-
 	// ArrayDeque is supposed to be the fastest collection
 	private final Queue<MouseEventWithType> mouseEvents = new ArrayDeque<>();
 
