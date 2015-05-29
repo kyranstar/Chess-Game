@@ -76,11 +76,13 @@ public class GameRenderer {
 		} else if (type == MouseEventType.RELEASE) {
 			releaseTile = tile;
 		}
-		if (pressTile != null && releaseTile != null) { // if first and last points have been
-			// entered, move piece and clear p1 and
-			// p2
-			if (!game.move(pressTile, releaseTile)) {
-				System.out.println("Invalid move");
+		if (pressTile != null && releaseTile != null) {
+			// Don't move if they didn't pick another tile
+			if (!pressTile.equals(releaseTile)) {
+				final boolean moved = game.move(pressTile, releaseTile);
+				if (!moved) {
+					System.out.println("Invalid move");
+				}
 			}
 			pressTile = releaseTile = null;
 		}
@@ -96,6 +98,7 @@ public class GameRenderer {
 
 	public void draw() {
 		final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
+		// Draw backround
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				final boolean white = x % 2 == 1 ^ y % 2 == 1;
@@ -103,6 +106,20 @@ public class GameRenderer {
 				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 			}
 		}
+		// Highlight available moves
+		final Color highlightColor = new Color(200, 200, 50, 100);
+		if (pressTile != null) {
+			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
+				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+					if (game.getPiece(pressTile.x, pressTile.y).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y) != null)) {
+						g.setColor(highlightColor);
+						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
+					}
+
+				}
+			}
+		}
+		// Draw pieces
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				g.drawImage(GraphicsConstants.getImage(game.getPiece(x, y)), null, x * TILE_WIDTH, y * TILE_WIDTH);

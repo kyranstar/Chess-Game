@@ -16,15 +16,15 @@ public class GamePiece {
 		final int dy = end.x - start.x;
 
 		switch (type) {
-		case PAWN: // pawn
+		case PAWN:
 			return dx == 1 && dy == 1 && isKillingOtherPiece || dx <= 1 && dy <= 1;
-		case BISHOP: // bishop
+		case BISHOP:
 			return dy == dx;
-		case KNIGHT: // knight
+		case KNIGHT:
 			return (dy == 2 * dx || dx == 2 * dy) && dy <= 2 && dx <= 2;
-		case ROOK: // rook
+		case ROOK:
 			return dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
-		case QUEEN: // queen
+		case QUEEN:
 			return dy == dx || dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
 		case KING:
 			return dy <= 1 && dx <= 1;

@@ -14,14 +14,14 @@ public class Game {
 	}
 
 	private void initializeBoard() {
-		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE); // white rook
-		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE); // white knight
-		board[0][2] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE); // white bishop
-		board[0][3] = new GamePiece(PieceType.QUEEN, PieceTeam.WHITE); // white queen
-		board[0][4] = new GamePiece(PieceType.KING, PieceTeam.WHITE); // white king
-		board[0][5] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE); // white bishop
-		board[0][6] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE); // white knight
-		board[0][7] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE); // white rook
+		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE);
+		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE);
+		board[0][2] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE);
+		board[0][3] = new GamePiece(PieceType.QUEEN, PieceTeam.WHITE);
+		board[0][4] = new GamePiece(PieceType.KING, PieceTeam.WHITE);
+		board[0][5] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE);
+		board[0][6] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE);
+		board[0][7] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE);
 		for (int i = 0; i < 8; i++) {
 			board[1][i] = new GamePiece(PieceType.PAWN, PieceTeam.WHITE); // white pawns
 		}
@@ -49,13 +49,16 @@ public class Game {
 	 * @return
 	 */
 	public boolean move(final Point p1, final Point p2) {
-		if (board[p1.y][p1.x].getTeam().isPlayerOne == p1sTurn) {
-			if (board[p1.y][p1.x].isLegalMove(p1, p2, board[p2.y][p2.x] != null && board[p2.y][p2.x].getTeam() != board[p1.y][p1.x].getTeam())) {
-				board[p2.y][p2.x] = board[p1.y][p1.x];
-				board[p1.y][p1.x] = null;
-				p1sTurn = !p1sTurn;
-				return true;
-			}
+		// Make sure it's the moved piece's turn
+		if (!board[p1.y][p1.x].getTeam().isPlayerOne == p1sTurn) {
+			return false;
+		}
+		final boolean isKillingPiece = board[p2.y][p2.x] != null && board[p2.y][p2.x].getTeam() != board[p1.y][p1.x].getTeam();
+		if (board[p1.y][p1.x].isLegalMove(p1, p2, isKillingPiece)) {
+			board[p2.y][p2.x] = board[p1.y][p1.x];
+			board[p1.y][p1.x] = null;
+			p1sTurn = !p1sTurn;
+			return true;
 		}
 		return false;
 	}
