@@ -14,32 +14,27 @@ public class Game {
 	}
 
 	private void initializeBoard() {
-		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE);
-		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE);
-		board[0][2] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE);
-		board[0][3] = new GamePiece(PieceType.QUEEN, PieceTeam.WHITE);
-		board[0][4] = new GamePiece(PieceType.KING, PieceTeam.WHITE);
-		board[0][5] = new GamePiece(PieceType.BISHOP, PieceTeam.WHITE);
-		board[0][6] = new GamePiece(PieceType.KNIGHT, PieceTeam.WHITE);
-		board[0][7] = new GamePiece(PieceType.ROOK, PieceTeam.WHITE);
+		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.BLACK);
+		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.BLACK);
+		board[0][2] = new GamePiece(PieceType.BISHOP, PieceTeam.BLACK);
+		board[0][3] = new GamePiece(PieceType.QUEEN, PieceTeam.BLACK);
+		board[0][4] = new GamePiece(PieceType.KING, PieceTeam.BLACK);
+		board[0][5] = new GamePiece(PieceType.BISHOP, PieceTeam.BLACK);
+		board[0][6] = new GamePiece(PieceType.KNIGHT, PieceTeam.BLACK);
+		board[0][7] = new GamePiece(PieceType.ROOK, PieceTeam.BLACK);
 		for (int i = 0; i < 8; i++) {
-			board[1][i] = new GamePiece(PieceType.PAWN, PieceTeam.WHITE); // white
-			// pawns
+			board[1][i] = new GamePiece(PieceType.PAWN, PieceTeam.BLACK);
 		}
 
-		// initializes black pieces by mirroring array
+		// initializes white pieces by mirroring array
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 8; c++) {
 				if (board[3 - r][c] != null) {
 					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(),
-							PieceTeam.BLACK);
+							PieceTeam.WHITE);
 				}
 			}
 		}
-		// switch black king/queen
-		final GamePiece temp = board[7][3];
-		board[7][3] = board[7][4];
-		board[7][4] = temp;
 	}
 
 	/**

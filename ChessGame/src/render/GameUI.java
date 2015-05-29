@@ -38,8 +38,7 @@ public class GameUI {
 
 	public GameUI(final JPanel panel) {
 		this.panel = panel;
-		game = new Game(); // What should are target fps be? must be passed to
-		// game constructor
+		game = new Game();
 		drawingBuffer = GraphicsUtils.createImage(panel.getWidth(), panel.getHeight(), Transparency.OPAQUE);
 	}
 
@@ -108,7 +107,7 @@ public class GameUI {
 		// Draw background
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
-				final boolean white = x % 2 == 1 ^ y % 2 == 1;
+				final boolean white = x % 2 == 0 ^ y % 2 == 1;
 				g.setColor(white ? Color.WHITE : new Color(100, 100, 100));
 				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 			}
