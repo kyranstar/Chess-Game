@@ -35,6 +35,7 @@ public class MainGame extends GameLoop {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		frame.setResizable(false);
 
 		final MainGame game = new MainGame(FPS, UPS, new GameRenderer(panel));
 		panel.addMouseListener(game);

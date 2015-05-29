@@ -60,6 +60,7 @@ public class GameRenderer {
 	}
 
 	private Point pressTile = null;
+	private Point dragPoint = null;
 	private Point releaseTile = null;
 
 	private void handleLeftMouseEvent(final MouseEventWithType eventWithType) {
@@ -74,10 +75,12 @@ public class GameRenderer {
 
 		if (type == MouseEventType.PRESS) {
 			pressTile = tile;
+			dragPoint = event.getPoint();
 		} else if (type == MouseEventType.DRAG) {
-			// TODO: Drag animation
+			dragPoint = event.getPoint();
 		} else if (type == MouseEventType.RELEASE) {
 			releaseTile = tile;
+			dragPoint = null;
 		}
 		if (pressTile != null && releaseTile != null) {
 			// Don't move if they didn't pick another tile
@@ -126,7 +129,13 @@ public class GameRenderer {
 		// Draw pieces
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
-				g.drawImage(GraphicsConstants.getImage(game.getPiece(x, y)), null, x * TILE_WIDTH, y * TILE_WIDTH);
+				final BufferedImage image = GraphicsConstants.getImage(game.getPiece(x, y));
+				// Draw drag point instead of original point
+				if (new Point(x, y).equals(pressTile)) {
+					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
+				}
+
+				g.drawImage(image, null, x * TILE_WIDTH, y * TILE_WIDTH);
 			}
 		}
 
