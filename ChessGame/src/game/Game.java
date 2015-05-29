@@ -82,4 +82,8 @@ public class Game {
 	public GamePiece getPiece(final int x, final int y) {
 		return board[y][x];
 	}
+
+	public GamePiece getPiece(final Point tile) {
+		return getPiece(tile.x, tile.y);
+	}
 }

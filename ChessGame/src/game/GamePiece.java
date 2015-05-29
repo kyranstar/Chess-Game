@@ -3,8 +3,8 @@ package game;
 import java.awt.Point;
 
 public class GamePiece {
-	private final PieceType type; // 0-pawn, 1-bishop, 2-knight, 3-rook, 4-queen, 5-king
-	private final PieceTeam team; // 0 = white, 1 = black
+	private final PieceType type;
+	private final PieceTeam team;
 
 	public GamePiece(final PieceType type, final PieceTeam team) {
 		this.type = type;
