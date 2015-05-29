@@ -113,13 +113,12 @@ public class GameUI {
 			}
 		}
 		// Highlight available moves
-		final Color highlightColor = new Color(200, 200, 50, 100);
+		final Color highlightColor = new Color(190, 160, 50, 150);
 		if (pressTile != null && game.getPiece(pressTile) != null) {
 			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
-					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y)) 
-							&& game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
+					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y)) && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 					}
@@ -132,8 +131,7 @@ public class GameUI {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				final BufferedImage image = GraphicsConstants.getImage(game.getPiece(x, y));
 				// Draw drag point instead of original point
-				if (new Point(x, y).equals(pressTile) && game.getPiece(pressTile) != null 
-						&& game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
+				if (new Point(x, y).equals(pressTile) && game.getPiece(pressTile) != null && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
 					continue;
 				}

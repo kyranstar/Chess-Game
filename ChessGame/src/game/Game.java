@@ -36,8 +36,8 @@ public class Game {
 	}
 
 	/**
-	 * is the other spot empty, if not is the piece there of the opposite team
-	 * is the move legal if all true, piece is moved and true is returned
+	 * is the other spot empty, if not is the piece there of the opposite team is the move legal if all true, piece is
+	 * moved and true is returned
 	 *
 	 * @param p1
 	 * @param p2
@@ -64,13 +64,13 @@ public class Game {
 	}
 
 	public String boardToString() {
-		StringBuilder out = new StringBuilder();
+		final StringBuilder out = new StringBuilder();
 		for (final GamePiece[] row : board) {
 			for (final GamePiece g : row) {
 				if (g == null) {
 					out.append('X');
 				} else {
-					// Print lowercase 'k' for knight so it doesn't conflict
+					// Print lower case 'k' for knight so it doesn't conflict
 					// with 'K'ing
 					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g.getType().toString().charAt(0));
 				}
