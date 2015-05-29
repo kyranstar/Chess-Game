@@ -10,7 +10,6 @@ public class Game {
 
 	public Game() {
 		initializeBoard();
-		System.out.println(boardToString().replace("|", "\n"));
 	}
 
 	private void initializeBoard() {
@@ -30,8 +29,7 @@ public class Game {
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 8; c++) {
 				if (board[3 - r][c] != null) {
-					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(),
-							PieceTeam.WHITE);
+					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(), PieceTeam.WHITE);
 				}
 			}
 		}
@@ -49,7 +47,8 @@ public class Game {
 		// Make sure it's the moved piece's turn
 		if (!(board[p1.y][p1.x].getTeam() == currentTeam)) {
 			return false;
-		};
+		}
+		;
 		if (board[p1.y][p1.x].isLegalMove(p1, p2, getPiece(p2))) {
 			board[p2.y][p2.x] = board[p1.y][p1.x];
 			board[p1.y][p1.x] = null;
@@ -65,21 +64,20 @@ public class Game {
 	}
 
 	public String boardToString() {
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		for (final GamePiece[] row : board) {
 			for (final GamePiece g : row) {
 				if (g == null) {
-					out += "X";
+					out.append('X');
 				} else {
 					// Print lowercase 'k' for knight so it doesn't conflict
 					// with 'K'ing
-					out += g.getType() == PieceType.KNIGHT ? 'k' : g.getType()
-							.toString().charAt(0);
+					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g.getType().toString().charAt(0));
 				}
 			}
-			out += "|";
+			out.append('\n');
 		}
-		return out;
+		return out.toString();
 	}
 
 	public GamePiece getPiece(final int x, final int y) {
