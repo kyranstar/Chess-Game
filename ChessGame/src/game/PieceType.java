@@ -1,22 +1,23 @@
 package game;
 
 public enum PieceType {
-	PAWN((dx, dy, team, isKillingOtherPiece) -> {
-		return dx == 1 && dy == 1 && isKillingOtherPiece || dx <= 1 && dy <= 1;
+	PAWN((dx, dy, team, pieceOnEndTile) -> {
+		boolean canKill = (pieceOnEndTile != null && pieceOnEndTile.getTeam() != team);
+		return dx == 1 && dy == 1 && canKill || dx <= 1 && dy <= 1;
 	}),
-	BISHOP((dx, dy, team, isKillingOtherPiece) -> {
+	BISHOP((dx, dy, team, pieceOnEndTile) -> {
 		return dy == dx;
 	}),
-	KNIGHT((dx, dy, team, isKillingOtherPiece) -> {
+	KNIGHT((dx, dy, team, pieceOnEndTile) -> {
 		return (dy == 2 * dx || dx == 2 * dy) && dy <= 2 && dx <= 2;
 	}),
-	ROOK((dx, dy, team, isKillingOtherPiece) -> {
+	ROOK((dx, dy, team, pieceOnEndTile) -> {
 		return dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
 	}),
-	QUEEN((dx, dy, team, isKillingOtherPiece) -> {
+	QUEEN((dx, dy, team, pieceOnEndTile) -> {
 		return dy == dx || dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
 	}),
-	KING((dx, dy, team, isKillingOtherPiece) -> {
+	KING((dx, dy, team, pieceOnEndTile) -> {
 		return dy <= 1 && dx <= 1;
 	});
 
@@ -28,7 +29,7 @@ public enum PieceType {
 
 	@FunctionalInterface
 	public static interface IsLegalMove {
-		public boolean call(int dx, int dy, PieceTeam team, boolean isKillingPiece);
+		public boolean call(int dx, int dy, PieceTeam team, GamePiece pieceOnEndTile);
 	}
 
 }

@@ -11,8 +11,8 @@ public class GamePiece {
 		this.team = team;
 	}
 
-	public boolean isLegalMove(final Point start, final Point end, final boolean isKillingOtherPiece) {
-		return type.isLegalMove.call(end.x - start.x, end.y - start.y, team, isKillingOtherPiece);
+	public boolean isLegalMove(final Point start, final Point end, final GamePiece pieceOnEndTile) {
+		return type.isLegalMove.call(end.x - start.x, end.y - start.y, team, pieceOnEndTile);
 	}
 
 	public PieceType getType() {

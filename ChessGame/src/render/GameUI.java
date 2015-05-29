@@ -119,7 +119,7 @@ public class GameUI {
 			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
-					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y) != null) 
+					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y)) 
 							&& game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);

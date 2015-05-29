@@ -54,10 +54,8 @@ public class Game {
 		// Make sure it's the moved piece's turn
 		if (!(board[p1.y][p1.x].getTeam() == currentTeam)) {
 			return false;
-		}
-		final boolean isKillingPiece = board[p2.y][p2.x] != null
-				&& board[p2.y][p2.x].getTeam() != board[p1.y][p1.x].getTeam();
-		if (board[p1.y][p1.x].isLegalMove(p1, p2, isKillingPiece)) {
+		};
+		if (board[p1.y][p1.x].isLegalMove(p1, p2, getPiece(p2))) {
 			board[p2.y][p2.x] = board[p1.y][p1.x];
 			board[p1.y][p1.x] = null;
 			// Swap teams
