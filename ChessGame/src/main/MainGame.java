@@ -11,10 +11,11 @@ import render.GameRenderer;
 
 public class MainGame extends GameLoop {
 
+	public static final int FPS = 60;
+	public static final int UPS = 60;
 	private final GameRenderer renderer;
 
-	protected MainGame(final int fps, final int ups,
-			final GameRenderer gameRenderer) {
+	protected MainGame(final int fps, final int ups, final GameRenderer gameRenderer) {
 		super(fps, ups);
 		renderer = gameRenderer;
 	}
@@ -27,8 +28,7 @@ public class MainGame extends GameLoop {
 	private static MainGame initialize() {
 		final JFrame frame = new JFrame(GameRenderer.GAME_TITLE);
 		final JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(GameRenderer.WIDTH,
-				GameRenderer.HEIGHT));
+		panel.setPreferredSize(new Dimension(GameRenderer.WIDTH, GameRenderer.HEIGHT));
 		panel.setBackground(Color.PINK);
 
 		frame.add(panel);
@@ -36,7 +36,7 @@ public class MainGame extends GameLoop {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
-		final MainGame game = new MainGame(60, 60, new GameRenderer(panel));
+		final MainGame game = new MainGame(FPS, UPS, new GameRenderer(panel));
 		panel.addMouseListener(game);
 		panel.addMouseMotionListener(game);
 
