@@ -3,6 +3,7 @@ package render;
 import game.Game;
 import helper.GraphicsConstants;
 import helper.GraphicsUtils;
+import helper.Logger;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,7 +20,7 @@ import javax.swing.SwingUtilities;
 import main.GameLoop.MouseEventType;
 import main.GameLoop.MouseEventWithType;
 
-public class GameRenderer {
+public class GameUI {
 	public static String GAME_TITLE = "Chess Game by Ben Zabback and Kyran Adams";
 
 	public static final int WIDTH = 600;
@@ -35,7 +36,7 @@ public class GameRenderer {
 
 	private final BufferedImage drawingBuffer;
 
-	public GameRenderer(final JPanel panel) {
+	public GameUI(final JPanel panel) {
 		this.panel = panel;
 		game = new Game(); // What should are target fps be? must be passed to
 		// game constructor
@@ -87,7 +88,7 @@ public class GameRenderer {
 			if (game.getPiece(pressTile) != null && !pressTile.equals(releaseTile)) {
 				final boolean moved = game.move(pressTile, releaseTile);
 				if (!moved) {
-					System.out.println("Invalid move");
+					Logger.info("Invalid move");
 				}
 			}
 			pressTile = releaseTile = null;
@@ -118,7 +119,8 @@ public class GameRenderer {
 			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
-					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y) != null)) {
+					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y) != null) 
+							&& game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 					}
@@ -131,8 +133,10 @@ public class GameRenderer {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				final BufferedImage image = GraphicsConstants.getImage(game.getPiece(x, y));
 				// Draw drag point instead of original point
-				if (new Point(x, y).equals(pressTile)) {
+				if (new Point(x, y).equals(pressTile) && game.getPiece(pressTile) != null 
+						&& game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
+					continue;
 				}
 
 				g.drawImage(image, null, x * TILE_WIDTH, y * TILE_WIDTH);
