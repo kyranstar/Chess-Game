@@ -75,4 +75,8 @@ public class Game {
 		}
 		return out;
 	}
+
+	public GamePiece getPiece(final int x, final int y) {
+		return board[y][x];
+	}
 }

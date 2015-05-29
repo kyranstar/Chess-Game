@@ -1,6 +1,7 @@
 package render;
 
 import game.Game;
+import helper.GraphicsConstants;
 import helper.Logger;
 
 import java.awt.Color;
@@ -33,7 +34,7 @@ public class GameRenderer {
 	public GameRenderer(final JPanel panel) {
 		this.panel = panel;
 		game = new Game(); // What should are target fps be? must be passed to
-							// game constructor
+		// game constructor
 	}
 
 	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
@@ -57,8 +58,7 @@ public class GameRenderer {
 		final MouseEvent event = eventWithType.event;
 		final Point tile = getTileFromScreen(event.getPoint());
 		// Return if out of bounds event
-		if (tile.x >= CHESSBOARD_SIDE_LENGTH || tile.x < 0
-				|| tile.y >= CHESSBOARD_SIDE_LENGTH || tile.y < 0) {
+		if (tile.x >= CHESSBOARD_SIDE_LENGTH || tile.x < 0 || tile.y >= CHESSBOARD_SIDE_LENGTH || tile.y < 0) {
 			return;
 		}
 		Logger.info("Mouse event in tile " + tile + " with type " + type);
@@ -71,8 +71,8 @@ public class GameRenderer {
 			p2 = event.getPoint();
 		}
 		if (p1 != null && p2 != null) { // if first and last points have been
-										// entered, move piece and clear p1 and
-										// p2
+			// entered, move piece and clear p1 and
+			// p2
 			if (!game.move(p1, p2)) {
 				System.out.println("Invalid move");
 			}
@@ -92,9 +92,13 @@ public class GameRenderer {
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				final boolean white = x % 2 == 1 ^ y % 2 == 1;
-				g.setColor(white ? Color.WHITE : Color.BLACK);
-				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH,
-						TILE_HEIGHT);
+				g.setColor(white ? Color.WHITE : new Color(100, 100, 100));
+				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
+			}
+		}
+		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
+			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+				g.drawImage(GraphicsConstants.getImage(game.getPiece(x, y)), null, x * TILE_WIDTH, y * TILE_WIDTH);
 			}
 		}
 	}
