@@ -12,25 +12,7 @@ public class GamePiece {
 	}
 
 	public boolean isLegalMove(final Point start, final Point end, final boolean isKillingOtherPiece) {
-		final int dx = end.y - start.y;
-		final int dy = end.x - start.x;
-
-		switch (type) {
-		case PAWN:
-			return dx == 1 && dy == 1 && isKillingOtherPiece || dx <= 1 && dy <= 1;
-		case BISHOP:
-			return dy == dx;
-		case KNIGHT:
-			return (dy == 2 * dx || dx == 2 * dy) && dy <= 2 && dx <= 2;
-		case ROOK:
-			return dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
-		case QUEEN:
-			return dy == dx || dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
-		case KING:
-			return dy <= 1 && dx <= 1;
-		default:
-			return false;
-		}
+		return type.isLegalMove.call(end.x - start.x, end.y - start.y, team, isKillingOtherPiece);
 	}
 
 	public PieceType getType() {
