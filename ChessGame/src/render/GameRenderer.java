@@ -3,7 +3,6 @@ package render;
 import game.Game;
 import helper.GraphicsConstants;
 import helper.GraphicsUtils;
-import helper.Logger;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -57,9 +56,10 @@ public class GameRenderer {
 		}
 	}
 
+	Point pressTile = null;
+	Point releaseTile = null;
+
 	private void handleLeftMouseEvent(final MouseEventWithType eventWithType) {
-		Point p1 = null;
-		Point p2 = null;
 		final MouseEventType type = eventWithType.type;
 		final MouseEvent event = eventWithType.event;
 		final Point tile = getTileFromScreen(event.getPoint());
@@ -67,21 +67,22 @@ public class GameRenderer {
 		if (tile.x >= CHESSBOARD_SIDE_LENGTH || tile.x < 0 || tile.y >= CHESSBOARD_SIDE_LENGTH || tile.y < 0) {
 			return;
 		}
-		Logger.info("Mouse event in tile " + tile + " with type " + type);
+		// Logger.info("Mouse event in tile " + tile + " with type " + type);
 
 		if (type == MouseEventType.PRESS) {
-			p1 = event.getPoint();
+			pressTile = tile;
 		} else if (type == MouseEventType.DRAG) {
 
 		} else if (type == MouseEventType.RELEASE) {
-			p2 = event.getPoint();
+			releaseTile = tile;
 		}
-		if (p1 != null && p2 != null) { // if first and last points have been
+		if (pressTile != null && releaseTile != null) { // if first and last points have been
 			// entered, move piece and clear p1 and
 			// p2
-			if (!game.move(p1, p2)) {
+			if (!game.move(pressTile, releaseTile)) {
 				System.out.println("Invalid move");
 			}
+			pressTile = releaseTile = null;
 		}
 	}
 
