@@ -2,12 +2,15 @@ package render;
 
 import game.Game;
 import helper.GraphicsConstants;
+import helper.GraphicsUtils;
 import helper.Logger;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Queue;
 
 import javax.swing.JPanel;
@@ -31,10 +34,13 @@ public class GameRenderer {
 	private final JPanel panel;
 	private final Game game;
 
+	private final BufferedImage drawingBuffer;
+
 	public GameRenderer(final JPanel panel) {
 		this.panel = panel;
 		game = new Game(); // What should are target fps be? must be passed to
 		// game constructor
+		drawingBuffer = GraphicsUtils.createImage(panel.getWidth(), panel.getHeight(), Transparency.OPAQUE);
 	}
 
 	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
@@ -88,7 +94,7 @@ public class GameRenderer {
 	}
 
 	public void draw() {
-		final Graphics2D g = (Graphics2D) panel.getGraphics();
+		final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 				final boolean white = x % 2 == 1 ^ y % 2 == 1;
@@ -101,5 +107,7 @@ public class GameRenderer {
 				g.drawImage(GraphicsConstants.getImage(game.getPiece(x, y)), null, x * TILE_WIDTH, y * TILE_WIDTH);
 			}
 		}
+
+		panel.getGraphics().drawImage(drawingBuffer, 0, 0, null);
 	}
 }
