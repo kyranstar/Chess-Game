@@ -7,6 +7,7 @@ import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import render.ChessPanel;
 import render.GameUI;
 
 public class MainGame extends GameLoop {
@@ -31,7 +32,7 @@ public class MainGame extends GameLoop {
 		panel.setPreferredSize(new Dimension(GameUI.WIDTH, GameUI.HEIGHT));
 		panel.setBackground(Color.PINK);
 
-		frame.add(panel);
+		frame.add(new ChessPanel(panel));
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

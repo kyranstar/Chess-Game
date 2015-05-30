@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.util.Queue;
 
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import main.GameLoop.MouseEventType;
@@ -49,12 +48,6 @@ public class GameUI {
 			// Handle left click events
 			if (SwingUtilities.isLeftMouseButton(event)) {
 				handleLeftMouseEvent(eventWithType);
-			}
-
-			// Handle right click menu
-			if (event.isPopupTrigger()) {
-				final JPopupMenu menu = new ChessPopupMenu();
-				menu.show(event.getComponent(), event.getX(), event.getY());
 			}
 		}
 	}
