@@ -1,6 +1,7 @@
 package render;
 
 import game.Game;
+import game.Move;
 import helper.GraphicsConstants;
 import helper.GraphicsUtils;
 import helper.Logger;
@@ -78,7 +79,7 @@ public class GameUI {
 		if (pressTile != null && releaseTile != null) {
 			// Don't move if they didn't pick another tile
 			if (game.getPiece(pressTile) != null && !pressTile.equals(releaseTile)) {
-				final boolean moved = game.move(pressTile, releaseTile);
+				final boolean moved = game.move(new Move(pressTile, releaseTile));
 				if (!moved) {
 					Logger.info("Invalid move");
 				}
@@ -111,7 +112,9 @@ public class GameUI {
 			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
-					if (game.getPiece(pressTile).isLegalMove(pressTile, new Point(x, y), game.getPiece(x, y)) && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
+					final Move move = new Move(pressTile, new Point(x, y));
+
+					if (game.getPiece(pressTile).isLegalMove(move, game.getPiece(x, y)) && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 					}

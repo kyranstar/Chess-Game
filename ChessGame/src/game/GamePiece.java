@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Point;
 
 public class GamePiece {
 	private final PieceType type;
@@ -11,8 +10,8 @@ public class GamePiece {
 		this.team = team;
 	}
 
-	public boolean isLegalMove(final Point start, final Point end, final GamePiece pieceOnEndTile) {
-		return type.isLegalMove.call(end.x - start.x, end.y - start.y, team, pieceOnEndTile);
+	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile) {
+		return type.isLegalMove.call(move.end.x - move.start.x, move.end.y - move.start.y, team, pieceOnEndTile);
 	}
 
 	public PieceType getType() {

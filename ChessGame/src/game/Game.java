@@ -39,19 +39,21 @@ public class Game {
 	 * is the other spot empty, if not is the piece there of the opposite team is the move legal if all true, piece is
 	 * moved and true is returned
 	 *
-	 * @param p1
-	 * @param p2
+	 * @param move
 	 * @return
 	 */
-	public boolean move(final Point p1, final Point p2) {
+	public boolean move(final Move move) {
+		final Point start = move.start;
+		final Point end = move.end;
+
 		// Make sure it's the moved piece's turn
-		if (!(board[p1.y][p1.x].getTeam() == currentTeam)) {
+		if (!(board[start.y][start.x].getTeam() == currentTeam)) {
 			return false;
 		}
-		;
-		if (board[p1.y][p1.x].isLegalMove(p1, p2, getPiece(p2))) {
-			board[p2.y][p2.x] = board[p1.y][p1.x];
-			board[p1.y][p1.x] = null;
+
+		if (board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end))) {
+			board[end.y][end.x] = board[start.y][start.x];
+			board[start.y][start.x] = null;
 			// Swap teams
 			if (currentTeam == PieceTeam.WHITE) {
 				currentTeam = PieceTeam.BLACK;
@@ -61,6 +63,11 @@ public class Game {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return boardToString() + "\nCurrent team: " + currentTeam;
 	}
 
 	public String boardToString() {
