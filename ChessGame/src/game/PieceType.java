@@ -1,30 +1,32 @@
 package game;
 
 public enum PieceType {
-	PAWN((dx, dy, team, pieceOnEndTile) -> {
-		boolean canKill = (pieceOnEndTile != null && pieceOnEndTile.getTeam() != team);
+	PAWN('p', (dx, dy, team, pieceOnEndTile) -> {
+		final boolean canKill = pieceOnEndTile != null && pieceOnEndTile.getTeam() != team;
 		return dx == 1 && dy == 1 && canKill || dx <= 1 && dy <= 1;
 	}),
-	BISHOP((dx, dy, team, pieceOnEndTile) -> {
+	BISHOP('b', (dx, dy, team, pieceOnEndTile) -> {
 		return dy == dx;
 	}),
-	KNIGHT((dx, dy, team, pieceOnEndTile) -> {
+	KNIGHT('k', (dx, dy, team, pieceOnEndTile) -> {
 		return (dy == 2 * dx || dx == 2 * dy) && dy <= 2 && dx <= 2;
 	}),
-	ROOK((dx, dy, team, pieceOnEndTile) -> {
+	ROOK('r', (dx, dy, team, pieceOnEndTile) -> {
 		return dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
 	}),
-	QUEEN((dx, dy, team, pieceOnEndTile) -> {
+	QUEEN('Q', (dx, dy, team, pieceOnEndTile) -> {
 		return dy == dx || dy >= 1 && dx == 0 || dx >= 1 && dy == 0;
 	}),
-	KING((dx, dy, team, pieceOnEndTile) -> {
+	KING('K', (dx, dy, team, pieceOnEndTile) -> {
 		return dy <= 1 && dx <= 1;
 	});
 
 	public final IsLegalMove isLegalMove;
+	public final char representation;
 
-	private PieceType(final IsLegalMove isLegalMove) {
+	private PieceType(final char representation, final IsLegalMove isLegalMove) {
 		this.isLegalMove = isLegalMove;
+		this.representation = representation;
 	}
 
 	@FunctionalInterface

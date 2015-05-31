@@ -6,16 +6,22 @@ import java.util.Arrays;
 public class Game {
 	private final GamePiece[][] board = new GamePiece[8][8];
 	private PieceTeam currentTeam;
+	private boolean isAI;
 
 	public Game() {
 		reset();
 	}
 
-	public void reset() {
-		currentTeam = PieceTeam.WHITE;
+	public void clearBoard() {
 		for (final GamePiece[] arr : board) {
 			Arrays.fill(arr, null);
 		}
+	}
+
+	public void reset() {
+		setCurrentTeam(PieceTeam.WHITE);
+		clearBoard();
+		isAI = false;
 
 		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.BLACK);
 		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.BLACK);
@@ -51,7 +57,7 @@ public class Game {
 		final Point end = move.end;
 
 		// Make sure it's the moved piece's turn
-		if (!(board[start.y][start.x].getTeam() == currentTeam)) {
+		if (!(board[start.y][start.x].getTeam() == getCurrentTeam())) {
 			return false;
 		}
 
@@ -59,10 +65,10 @@ public class Game {
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
 			// Swap teams
-			if (currentTeam == PieceTeam.WHITE) {
-				currentTeam = PieceTeam.BLACK;
-			} else if (currentTeam == PieceTeam.BLACK) {
-				currentTeam = PieceTeam.WHITE;
+			if (getCurrentTeam() == PieceTeam.WHITE) {
+				setCurrentTeam(PieceTeam.BLACK);
+			} else if (getCurrentTeam() == PieceTeam.BLACK) {
+				setCurrentTeam(PieceTeam.WHITE);
 			}
 			return true;
 		}
@@ -71,7 +77,7 @@ public class Game {
 
 	@Override
 	public String toString() {
-		return boardToString() + "\nCurrent team: " + currentTeam;
+		return boardToString() + "\nCurrent team: " + getCurrentTeam();
 	}
 
 	public String boardToString() {
@@ -101,5 +107,21 @@ public class Game {
 
 	public PieceTeam getCurrentTeam() {
 		return currentTeam;
+	}
+
+	public void setPiece(final int x, final int y, final GamePiece object) {
+		board[y][x] = object;
+	}
+
+	public void setCurrentTeam(final PieceTeam currentTeam) {
+		this.currentTeam = currentTeam;
+	}
+
+	public boolean isAI() {
+		return isAI;
+	}
+
+	public void setAI(final boolean isAI) {
+		this.isAI = isAI;
 	}
 }
