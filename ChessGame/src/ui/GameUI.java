@@ -1,4 +1,4 @@
-package render;
+package ui;
 
 import game.Game;
 import game.Move;
@@ -34,11 +34,14 @@ public class GameUI {
 	private final JPanel panel;
 	private final Game game;
 
-	private final BufferedImage drawingBuffer;
+	private BufferedImage drawingBuffer;
 
 	public GameUI(final JPanel panel) {
 		this.panel = panel;
 		game = new Game();
+	}
+
+	public void initialize() {
 		drawingBuffer = GraphicsUtils.createImage(panel.getWidth(), panel.getHeight(), Transparency.OPAQUE);
 	}
 
@@ -78,8 +81,8 @@ public class GameUI {
 		}
 		if (pressTile != null && releaseTile != null) {
 			// Don't move if they didn't pick another tile
-			if (game.getPiece(pressTile) != null && !pressTile.equals(releaseTile)) {
-				final boolean moved = game.move(new Move(pressTile, releaseTile));
+			if (getGame().getPiece(pressTile) != null && !pressTile.equals(releaseTile)) {
+				final boolean moved = getGame().move(new Move(pressTile, releaseTile));
 				if (!moved) {
 					Logger.info("Invalid move");
 				}
@@ -108,13 +111,13 @@ public class GameUI {
 		}
 		// Highlight available moves
 		final Color highlightColor = new Color(190, 160, 50, 150);
-		if (pressTile != null && game.getPiece(pressTile) != null) {
+		if (pressTile != null && getGame().getPiece(pressTile) != null) {
 			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
 					final Move move = new Move(pressTile, new Point(x, y));
 
-					if (game.getPiece(pressTile).isLegalMove(move, game.getPiece(x, y)) && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
+					if (getGame().getPiece(pressTile).isLegalMove(move, getGame().getPiece(x, y)) && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
 					}
@@ -125,9 +128,9 @@ public class GameUI {
 		// Draw pieces
 		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
 			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
-				final BufferedImage image = GraphicsConstants.getImage(game.getPiece(x, y));
+				final BufferedImage image = GraphicsConstants.getImage(getGame().getPiece(x, y));
 				// Draw drag point instead of original point
-				if (new Point(x, y).equals(pressTile) && game.getPiece(pressTile) != null && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
+				if (new Point(x, y).equals(pressTile) && getGame().getPiece(pressTile) != null && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
 					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
 					continue;
 				}
@@ -137,5 +140,9 @@ public class GameUI {
 		}
 
 		panel.getGraphics().drawImage(drawingBuffer, 0, 0, null);
+	}
+
+	public Game getGame() {
+		return game;
 	}
 }
