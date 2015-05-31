@@ -35,7 +35,7 @@ public class MainGame extends GameLoop {
 
 		final MainGame game = new MainGame(FPS, UPS, new GameUI(panel));
 
-		frame.add(new ChessPanel(panel, new ChessUIResponder(game.renderer.getGame())));
+		frame.add(new ChessPanel(panel, new ChessUIResponder(game.renderer.getGame(), panel)));
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

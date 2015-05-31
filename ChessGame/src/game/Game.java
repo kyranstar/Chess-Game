@@ -1,18 +1,22 @@
 package game;
 
 import java.awt.Point;
+import java.util.Arrays;
 
 public class Game {
 	private final GamePiece[][] board = new GamePiece[8][8];
-	private PieceTeam currentTeam = PieceTeam.WHITE;
-	private final int scoreP1 = 0; // player 1 score
-	private final int scoreP2 = 0; // player 2 score
+	private PieceTeam currentTeam;
 
 	public Game() {
-		initializeBoard();
+		reset();
 	}
 
-	private void initializeBoard() {
+	public void reset() {
+		currentTeam = PieceTeam.WHITE;
+		for (final GamePiece[] arr : board) {
+			Arrays.fill(arr, null);
+		}
+
 		board[0][0] = new GamePiece(PieceType.ROOK, PieceTeam.BLACK);
 		board[0][1] = new GamePiece(PieceType.KNIGHT, PieceTeam.BLACK);
 		board[0][2] = new GamePiece(PieceType.BISHOP, PieceTeam.BLACK);
