@@ -1,11 +1,15 @@
 package game;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameSerializer {
@@ -42,6 +46,13 @@ public class GameSerializer {
 		return load(lines);
 	}
 
+	public static Game load(final InputStream input) throws IOException {
+
+		final List<String> lines = Arrays.asList(getStringFromInputStream(input).split("\n"));
+		assert lines.size() == 10;
+		return load(lines);
+	}
+
 	private static Game load(final List<String> lines) {
 		final Game game = new Game();
 		game.clearBoard();
@@ -64,7 +75,7 @@ public class GameSerializer {
 				if (piece == null) {
 					throw new RuntimeException("Unrecognized character found: " + pieceChar);
 				}
-				game.setPiece(j, i, piece);
+				game.setPiece(j / 2, i, piece);
 			}
 		}
 		final char currentTeam = Character.toLowerCase(lines.get(8).charAt(0));
@@ -72,5 +83,40 @@ public class GameSerializer {
 		game.setAI(Boolean.parseBoolean(lines.get(9)));
 
 		return game;
+	}
+
+	/**
+	 * Lossy way to convert an input stream to a string(changes any type of line ending to \n)
+	 *
+	 * @param input
+	 * @return string form of input
+	 */
+	private static String getStringFromInputStream(final InputStream input) {
+
+		BufferedReader br = null;
+		final StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+
+			br = new BufferedReader(new InputStreamReader(input));
+			while ((line = br.readLine()) != null) {
+				sb.append(line + '\n');
+			}
+
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sb.toString();
+
 	}
 }

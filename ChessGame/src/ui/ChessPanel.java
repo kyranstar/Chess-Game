@@ -23,6 +23,7 @@ public class ChessPanel extends javax.swing.JPanel {
 	 */
 	public ChessPanel(final JPanel gamePanel, final ChessUIResponder uiResponder) {
 		initComponents(gamePanel, uiResponder);
+		uiResponder.setChessPanel(this);
 	}
 
 	/**
@@ -69,24 +70,37 @@ public class ChessPanel extends javax.swing.JPanel {
 						.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(
-								menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(titleLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(newGameButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(undoButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(loadButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(saveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(aiToggle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
+								menuPanelLayout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+						.addComponent(titleLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(newGameButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(undoButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(loadButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(saveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(aiToggle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE)).addContainerGap()));
 		menuPanelLayout.setVerticalGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
 				javax.swing.GroupLayout.Alignment.TRAILING,
-				menuPanelLayout.createSequentialGroup().addContainerGap().addComponent(titleLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE).addComponent(newGameButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(saveButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(loadButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(undoButton)
+				menuPanelLayout.createSequentialGroup().addContainerGap().addComponent(titleLabel)
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE).addComponent(newGameButton)
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(saveButton)
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(loadButton)
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(undoButton)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(aiToggle).addGap(10, 10, 10)));
 
 		jSplitPane1.setLeftComponent(menuPanel);
 
 		final javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
 		gamePanel.setLayout(gamePanelLayout);
-		gamePanelLayout.setHorizontalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 293, Short.MAX_VALUE));
-		gamePanelLayout.setVerticalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 298, Short.MAX_VALUE));
+		gamePanelLayout.setHorizontalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 293,
+				Short.MAX_VALUE));
+		gamePanelLayout.setVerticalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 298,
+				Short.MAX_VALUE));
 
 		jSplitPane1.setRightComponent(gamePanel);
 		jSplitPane1.setEnabled(false);
@@ -94,7 +108,7 @@ public class ChessPanel extends javax.swing.JPanel {
 	}
 
 	// Variables declaration - do not modify
-	private javax.swing.JCheckBox aiToggle;
+	public javax.swing.JCheckBox aiToggle;
 	public javax.swing.JPanel gamePanel;
 	private javax.swing.JSplitPane jSplitPane1;
 	private javax.swing.JButton loadButton;
