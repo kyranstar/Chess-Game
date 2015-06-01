@@ -41,7 +41,8 @@ public class GameUI {
 	}
 
 	public void initialize() {
-		drawingBuffer = GraphicsUtils.createImage(panel.getWidth(), panel.getHeight(), Transparency.OPAQUE);
+		drawingBuffer = GraphicsUtils.createImage(panel.getWidth(),
+				panel.getHeight(), Transparency.OPAQUE);
 	}
 
 	public void processInput(final Queue<MouseEventWithType> mouseEvents) {
@@ -64,7 +65,8 @@ public class GameUI {
 		final MouseEvent event = eventWithType.event;
 		final Point tile = getTileFromScreen(event.getPoint());
 		// Return if out of bounds event
-		if (tile.x >= Game.SIDE_LENGTH || tile.x < 0 || tile.y >= Game.SIDE_LENGTH || tile.y < 0) {
+		if (tile.x >= Game.SIDE_LENGTH || tile.x < 0
+				|| tile.y >= Game.SIDE_LENGTH || tile.y < 0) {
 			return;
 		}
 
@@ -79,8 +81,10 @@ public class GameUI {
 		}
 		if (pressTile != null && releaseTile != null) {
 			// Don't move if they didn't pick another tile
-			if (getGame().getPiece(pressTile) != null && !pressTile.equals(releaseTile)) {
-				final boolean moved = getGame().move(new Move(pressTile, releaseTile));
+			if (getGame().getPiece(pressTile) != null
+					&& !pressTile.equals(releaseTile)) {
+				final boolean moved = getGame().move(
+						new Move(pressTile, releaseTile));
 				if (!moved) {
 					Logger.info("Invalid move");
 				}
@@ -94,9 +98,11 @@ public class GameUI {
 	}
 
 	public void update() {
-		if(getGame().isAI() && getGame().getAiAlgorithm() != null && getGame().getCurrentTeam() == PieceTeam.BLACK){
-			boolean valid = getGame().move(getGame().getAiAlgorithm().getNextMove(getGame()));
-			if(!valid){
+		if (getGame().isAI() && getGame().getAiAlgorithm() != null
+				&& getGame().getCurrentTeam() == PieceTeam.BLACK) {
+			boolean valid = getGame().move(
+					getGame().getAiAlgorithm().getNextMove(getGame()));
+			if (!valid) {
 				Logger.error("AI failed! Move generated was not valid.");
 			}
 		}
@@ -109,7 +115,8 @@ public class GameUI {
 			for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 				final boolean white = x % 2 == 0 ^ y % 2 == 1;
 				g.setColor(white ? Color.WHITE : new Color(100, 100, 100));
-				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
+				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH,
+						TILE_HEIGHT);
 			}
 		}
 		// Highlight available moves
@@ -120,9 +127,11 @@ public class GameUI {
 					// If it's a legal move, draw the highlight color
 					final Move move = new Move(pressTile, new Point(x, y));
 
-					if (getGame().getPiece(pressTile).isLegalMove(move, getGame().getPiece(x, y)) && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
+					if (getGame().getPiece(pressTile).isLegalMove(move,
+							game.getPiece(x, y), game.getBoard())) {
 						g.setColor(highlightColor);
-						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
+						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH,
+								TILE_HEIGHT);
 					}
 
 				}
@@ -131,10 +140,16 @@ public class GameUI {
 		// Draw pieces
 		for (int x = 0; x < Game.SIDE_LENGTH; x++) {
 			for (int y = 0; y < Game.SIDE_LENGTH; y++) {
-				final BufferedImage image = GraphicsConstants.getImage(getGame().getPiece(x, y));
+				final BufferedImage image = GraphicsConstants
+						.getImage(getGame().getPiece(x, y));
 				// Draw drag point instead of original point
-				if (new Point(x, y).equals(pressTile) && getGame().getPiece(pressTile) != null && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
-					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
+				if (new Point(x, y).equals(pressTile)
+						&& getGame().getPiece(pressTile) != null
+						&& getGame().getPiece(pressTile).getTeam() == getGame()
+								.getCurrentTeam()) {
+					g.drawImage(image, null,
+							dragPoint.x - image.getWidth() / 2, dragPoint.y
+									- image.getHeight() / 2);
 					continue;
 				}
 

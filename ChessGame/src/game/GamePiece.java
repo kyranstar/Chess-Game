@@ -1,6 +1,5 @@
 package game;
 
-
 public class GamePiece {
 	private final PieceType type;
 	private final PieceTeam team;
@@ -10,8 +9,9 @@ public class GamePiece {
 		this.team = team;
 	}
 
-	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile) {
-		return type.isLegalMove.call(move.end.x - move.start.x, move.end.y - move.start.y, team, pieceOnEndTile);
+	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile,
+			final GamePiece[][] board) {
+		return type.isLegalMove.call(team, pieceOnEndTile, board, move);
 	}
 
 	public PieceType getType() {

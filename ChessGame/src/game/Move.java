@@ -20,4 +20,12 @@ public class Move {
 	public Move getInverse() {
 		return new Move(end, start);
 	}
+
+	public int getdx() {
+		return end.x - start.x;
+	}
+
+	public int getdy() {
+		return end.y - start.y;
+	}
 }

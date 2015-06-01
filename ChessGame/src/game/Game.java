@@ -1,7 +1,5 @@
 package game;
 
-import helper.Logger;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Stack;
@@ -10,7 +8,7 @@ import ai.ChessAI;
 
 public class Game {
 	public static final int SIDE_LENGTH = 8;
-	
+
 	private final GamePiece[][] board = new GamePiece[SIDE_LENGTH][SIDE_LENGTH];
 	private PieceTeam currentTeam;
 	private boolean isAI;
@@ -19,6 +17,10 @@ public class Game {
 
 	public Game() {
 		reset();
+	}
+
+	public GamePiece[][] getBoard() {
+		return board;
 	}
 
 	public void clearBoard() {
@@ -46,18 +48,19 @@ public class Game {
 		}
 
 		// initializes white pieces by mirroring array
-		for (int r = 0; r < SIDE_LENGTH/2; r++) {
+		for (int r = 0; r < SIDE_LENGTH / 2; r++) {
 			for (int c = 0; c < SIDE_LENGTH; c++) {
 				if (board[3 - r][c] != null) {
-					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(), PieceTeam.WHITE);
+					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(),
+							PieceTeam.WHITE);
 				}
 			}
 		}
 	}
 
 	/**
-	 * is the other spot empty, if not is the piece there of the opposite team is the move legal if all true, piece is
-	 * moved and true is returned
+	 * is the other spot empty, if not is the piece there of the opposite team
+	 * is the move legal if all true, piece is moved and true is returned
 	 *
 	 * @param move
 	 * @return whether the move was successful
@@ -71,7 +74,8 @@ public class Game {
 			return false;
 		}
 
-		if (board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end))) {
+		if (board[start.y][start.x].isLegalMove(new Move(start, end),
+				getPiece(end), board)) {
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
 			swapTeams();
@@ -83,7 +87,7 @@ public class Game {
 	}
 
 	public void undo() {
-		//TODO: Account for pieces that were taken by moves
+		// TODO: Account for pieces that were taken by moves
 		if (moveStack.isEmpty()) {
 			return;
 		}
@@ -117,7 +121,8 @@ public class Game {
 				} else {
 					// Print lower case 'k' for knight so it doesn't conflict
 					// with 'K'ing
-					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g.getType().toString().charAt(0));
+					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g
+							.getType().toString().charAt(0));
 				}
 			}
 			out.append('\n');
@@ -140,7 +145,7 @@ public class Game {
 	public PieceTeam getCurrentTeam() {
 		return currentTeam;
 	}
-	
+
 	public void setCurrentTeam(final PieceTeam currentTeam) {
 		this.currentTeam = currentTeam;
 	}
