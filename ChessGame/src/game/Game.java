@@ -2,11 +2,13 @@ package game;
 
 import java.awt.Point;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Game {
 	private final GamePiece[][] board = new GamePiece[8][8];
 	private PieceTeam currentTeam;
 	private boolean isAI;
+	private Stack<Move> moveStack;
 
 	public Game() {
 		reset();
@@ -19,6 +21,7 @@ public class Game {
 	}
 
 	public void reset() {
+		moveStack = new Stack<>();
 		setCurrentTeam(PieceTeam.WHITE);
 		clearBoard();
 		isAI = false;
@@ -50,7 +53,7 @@ public class Game {
 	 * moved and true is returned
 	 *
 	 * @param move
-	 * @return
+	 * @return whether the move was successful
 	 */
 	public boolean move(final Move move) {
 		final Point start = move.start;
@@ -64,15 +67,32 @@ public class Game {
 		if (board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end))) {
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
-			// Swap teams
-			if (getCurrentTeam() == PieceTeam.WHITE) {
-				setCurrentTeam(PieceTeam.BLACK);
-			} else if (getCurrentTeam() == PieceTeam.BLACK) {
-				setCurrentTeam(PieceTeam.WHITE);
-			}
+			swapTeams();
+
+			moveStack.push(move);
 			return true;
 		}
 		return false;
+	}
+
+	public void undo() {
+		if (moveStack.isEmpty()) {
+			return;
+		}
+		final Move move = moveStack.pop().getInverse();
+		final Point end = move.end;
+		final Point start = move.start;
+		board[end.y][end.x] = board[start.y][start.x];
+		board[start.y][start.x] = null;
+		swapTeams();
+	}
+
+	private void swapTeams() {
+		if (getCurrentTeam() == PieceTeam.WHITE) {
+			setCurrentTeam(PieceTeam.BLACK);
+		} else if (getCurrentTeam() == PieceTeam.BLACK) {
+			setCurrentTeam(PieceTeam.WHITE);
+		}
 	}
 
 	@Override

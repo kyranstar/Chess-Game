@@ -82,6 +82,7 @@ public class ChessUIResponder {
 
 	public void undoClicked(final ActionEvent event) {
 		Logger.info("Undo move clicked");
+		game.undo();
 	}
 
 	public void aiSet(final boolean ai) {

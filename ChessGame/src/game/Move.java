@@ -4,7 +4,7 @@ import java.awt.Point;
 
 /**
  * Represents a move from one square to another.
- * 
+ *
  * @author Kyran Adams
  *
  */
@@ -17,4 +17,7 @@ public class Move {
 		this.end = end;
 	}
 
+	public Move getInverse() {
+		return new Move(end, start);
+	}
 }
