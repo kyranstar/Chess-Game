@@ -14,7 +14,8 @@ import javax.swing.JPanel;
  *
  * @author Kyran Adams
  */
-public class ChessPanel extends javax.swing.JPanel {
+@SuppressWarnings("serial")
+public class ChessPanel extends JPanel {
 
 	/**
 	 * Creates new form ChessPanel

@@ -37,6 +37,5 @@ public class GameTest {
 			assertEquals(PieceType.PAWN, game.getPiece(i, 1).getType());
 			assertEquals(PieceType.PAWN, game.getPiece(i, 6).getType());
 		}
-
 	}
 }

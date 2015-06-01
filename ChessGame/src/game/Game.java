@@ -1,13 +1,20 @@
 package game;
 
+import helper.Logger;
+
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Stack;
 
+import ai.ChessAI;
+
 public class Game {
-	private final GamePiece[][] board = new GamePiece[8][8];
+	public static final int SIDE_LENGTH = 8;
+	
+	private final GamePiece[][] board = new GamePiece[SIDE_LENGTH][SIDE_LENGTH];
 	private PieceTeam currentTeam;
 	private boolean isAI;
+	private ChessAI ai;
 	private Stack<Move> moveStack;
 
 	public Game() {
@@ -34,13 +41,13 @@ public class Game {
 		board[0][5] = new GamePiece(PieceType.BISHOP, PieceTeam.BLACK);
 		board[0][6] = new GamePiece(PieceType.KNIGHT, PieceTeam.BLACK);
 		board[0][7] = new GamePiece(PieceType.ROOK, PieceTeam.BLACK);
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < SIDE_LENGTH; i++) {
 			board[1][i] = new GamePiece(PieceType.PAWN, PieceTeam.BLACK);
 		}
 
 		// initializes white pieces by mirroring array
-		for (int r = 0; r < 4; r++) {
-			for (int c = 0; c < 8; c++) {
+		for (int r = 0; r < SIDE_LENGTH/2; r++) {
+			for (int c = 0; c < SIDE_LENGTH; c++) {
 				if (board[3 - r][c] != null) {
 					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(), PieceTeam.WHITE);
 				}
@@ -60,7 +67,7 @@ public class Game {
 		final Point end = move.end;
 
 		// Make sure it's the moved piece's turn
-		if (!(board[start.y][start.x].getTeam() == getCurrentTeam())) {
+		if (board[start.y][start.x].getTeam() != getCurrentTeam()) {
 			return false;
 		}
 
@@ -76,6 +83,7 @@ public class Game {
 	}
 
 	public void undo() {
+		//TODO: Account for pieces that were taken by moves
 		if (moveStack.isEmpty()) {
 			return;
 		}
@@ -87,7 +95,7 @@ public class Game {
 		swapTeams();
 	}
 
-	private void swapTeams() {
+	private final void swapTeams() {
 		if (getCurrentTeam() == PieceTeam.WHITE) {
 			setCurrentTeam(PieceTeam.BLACK);
 		} else if (getCurrentTeam() == PieceTeam.BLACK) {
@@ -125,14 +133,14 @@ public class Game {
 		return getPiece(tile.x, tile.y);
 	}
 
-	public PieceTeam getCurrentTeam() {
-		return currentTeam;
-	}
-
 	public void setPiece(final int x, final int y, final GamePiece object) {
 		board[y][x] = object;
 	}
 
+	public PieceTeam getCurrentTeam() {
+		return currentTeam;
+	}
+	
 	public void setCurrentTeam(final PieceTeam currentTeam) {
 		this.currentTeam = currentTeam;
 	}
@@ -143,5 +151,13 @@ public class Game {
 
 	public void setAI(final boolean isAI) {
 		this.isAI = isAI;
+	}
+
+	public ChessAI getAiAlgorithm() {
+		return ai;
+	}
+
+	public void setAiAlgorithm(ChessAI ai) {
+		this.ai = ai;
 	}
 }

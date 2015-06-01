@@ -9,5 +9,5 @@ public interface ChessAI {
 	 * @param game
 	 * @return the next move to carry out
 	 */
-	public Move nextMove(Game game);
+	public Move getNextMove(Game game);
 }

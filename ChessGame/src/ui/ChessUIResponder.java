@@ -65,8 +65,8 @@ public class ChessUIResponder {
 				return;
 			}
 			final Game newGame = GameSerializer.load(userFile);
-			for (int x = 0; x < 8; x++) {
-				for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < Game.SIDE_LENGTH; x++) {
+				for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 					game.setPiece(x, y, newGame.getPiece(x, y));
 				}
 			}

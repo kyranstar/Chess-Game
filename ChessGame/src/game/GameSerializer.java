@@ -21,8 +21,8 @@ public class GameSerializer {
 	public static void save(final Game game, final OutputStream outputStream) {
 		final PrintWriter out = new PrintWriter(outputStream);
 
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < Game.SIDE_LENGTH; i++) {
+			for (int j = 0; j < Game.SIDE_LENGTH; j++) {
 				if (game.getPiece(j, i) == null) {
 					// NN
 					out.print(String.valueOf(NULL) + NULL);
@@ -57,8 +57,8 @@ public class GameSerializer {
 		final Game game = new Game();
 		game.clearBoard();
 		// load board
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 16; j += 2) {
+		for (int i = 0; i < Game.SIDE_LENGTH; i++) {
+			for (int j = 0; j < Game.SIDE_LENGTH * 2; j += 2) {
 				// type then team
 				final PieceTeam team = Character.toLowerCase(lines.get(i).charAt(j + 1)) == 'w' ? PieceTeam.WHITE : PieceTeam.BLACK;
 				final char pieceChar = lines.get(i).charAt(j);

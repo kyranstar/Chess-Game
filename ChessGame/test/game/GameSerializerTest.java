@@ -79,8 +79,8 @@ public class GameSerializerTest extends GameSerializer {
 		final InputStream input = new ByteArrayInputStream(output.toString().getBytes(StandardCharsets.UTF_8));
 		final Game newGame = GameSerializer.load(input);
 
-		for (int y = 0; y < 8; y++) {
-			for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < Game.SIDE_LENGTH; y++) {
+			for (int x = 0; x < Game.SIDE_LENGTH; x++) {
 				assertEquals(game.getPiece(x, y), newGame.getPiece(x, y));
 			}
 		}

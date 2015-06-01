@@ -2,6 +2,7 @@ package ui;
 
 import game.Game;
 import game.Move;
+import game.PieceTeam;
 import helper.GraphicsConstants;
 import helper.GraphicsUtils;
 import helper.Logger;
@@ -26,10 +27,8 @@ public class GameUI {
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 600;
 
-	private static final int CHESSBOARD_SIDE_LENGTH = 8;
-
-	private static final int TILE_WIDTH = WIDTH / CHESSBOARD_SIDE_LENGTH;
-	private static final int TILE_HEIGHT = HEIGHT / CHESSBOARD_SIDE_LENGTH;
+	private static final int TILE_WIDTH = WIDTH / Game.SIDE_LENGTH;
+	private static final int TILE_HEIGHT = HEIGHT / Game.SIDE_LENGTH;
 
 	private final JPanel panel;
 	private final Game game;
@@ -65,10 +64,9 @@ public class GameUI {
 		final MouseEvent event = eventWithType.event;
 		final Point tile = getTileFromScreen(event.getPoint());
 		// Return if out of bounds event
-		if (tile.x >= CHESSBOARD_SIDE_LENGTH || tile.x < 0 || tile.y >= CHESSBOARD_SIDE_LENGTH || tile.y < 0) {
+		if (tile.x >= Game.SIDE_LENGTH || tile.x < 0 || tile.y >= Game.SIDE_LENGTH || tile.y < 0) {
 			return;
 		}
-		// Logger.info("Mouse event in tile " + tile + " with type " + type);
 
 		if (type == MouseEventType.PRESS) {
 			pressTile = tile;
@@ -96,14 +94,19 @@ public class GameUI {
 	}
 
 	public void update() {
-
+		if(getGame().isAI() && getGame().getAiAlgorithm() != null && getGame().getCurrentTeam() == PieceTeam.BLACK){
+			boolean valid = getGame().move(getGame().getAiAlgorithm().getNextMove(getGame()));
+			if(!valid){
+				Logger.error("AI failed! Move generated was not valid.");
+			}
+		}
 	}
 
 	public void draw() {
 		final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
 		// Draw background
-		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
-			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+		for (int x = 0; x < Game.SIDE_LENGTH; x++) {
+			for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 				final boolean white = x % 2 == 0 ^ y % 2 == 1;
 				g.setColor(white ? Color.WHITE : new Color(100, 100, 100));
 				g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_HEIGHT);
@@ -112,8 +115,8 @@ public class GameUI {
 		// Highlight available moves
 		final Color highlightColor = new Color(190, 160, 50, 150);
 		if (pressTile != null && getGame().getPiece(pressTile) != null) {
-			for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
-				for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+			for (int x = 0; x < Game.SIDE_LENGTH; x++) {
+				for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 					// If it's a legal move, draw the highlight color
 					final Move move = new Move(pressTile, new Point(x, y));
 
@@ -126,8 +129,8 @@ public class GameUI {
 			}
 		}
 		// Draw pieces
-		for (int x = 0; x < CHESSBOARD_SIDE_LENGTH; x++) {
-			for (int y = 0; y < CHESSBOARD_SIDE_LENGTH; y++) {
+		for (int x = 0; x < Game.SIDE_LENGTH; x++) {
+			for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 				final BufferedImage image = GraphicsConstants.getImage(getGame().getPiece(x, y));
 				// Draw drag point instead of original point
 				if (new Point(x, y).equals(pressTile) && getGame().getPiece(pressTile) != null && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
