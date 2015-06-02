@@ -120,7 +120,7 @@ public class GameUI {
 			}
 		}
 		// Highlight available moves
-		final Color highlightColor = new Color(190, 160, 50, 150);
+		final Color highlightColor = new Color(190, 160, 50, 150); //a sulfur yellow with hints of barley and ash...
 		if (pressTile != null && getGame().getPiece(pressTile) != null) {
 			for (int x = 0; x < Game.SIDE_LENGTH; x++) {
 				for (int y = 0; y < Game.SIDE_LENGTH; y++) {
