@@ -1,8 +1,9 @@
 package game;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
+import java.util.List;
 
 import ai.ChessAI;
 
@@ -18,7 +19,6 @@ public class Game {
 	public Game() {
 		reset();
 	}
-
 
 	public void clearBoard() {
 		for (final GamePiece[] arr : board) {
@@ -48,8 +48,7 @@ public class Game {
 		for (int r = 0; r < SIDE_LENGTH / 2; r++) {
 			for (int c = 0; c < SIDE_LENGTH; c++) {
 				if (board[3 - r][c] != null) {
-					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(),
-							PieceTeam.WHITE);
+					board[4 + r][c] = new GamePiece(board[3 - r][c].getType(), PieceTeam.WHITE);
 				}
 			}
 		}
@@ -71,10 +70,9 @@ public class Game {
 			return false;
 		}
 
-		if (board[start.y][start.x].isLegalMove(new Move(start, end),
-				getPiece(end), board)) {
+		if (board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end), board)) {
 			undoStack.doMove(this);
-			
+
 			getPiece(start).setHasBeenMoved(true);
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
@@ -110,8 +108,7 @@ public class Game {
 				} else {
 					// Print lower case 'k' for knight so it doesn't conflict
 					// with 'K'ing
-					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g
-							.getType().toString().charAt(0));
+					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g.getType().toString().charAt(0));
 				}
 			}
 			out.append('\n');
@@ -155,12 +152,16 @@ public class Game {
 		this.ai = ai;
 	}
 
-	public void setBoard(GamePiece[][] board){
+	public void setBoard(GamePiece[][] board) {
 		this.board = board;
 	}
 
-
 	public GamePiece[][] getBoard() {
 		return board;
+	}
+
+	public boolean isCheckM8(PieceTeam team) {
+		List<GamePiece[][]> unsafeTeamMoves = new ArrayList<>();
+
 	}
 }
