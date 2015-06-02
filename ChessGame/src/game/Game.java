@@ -9,19 +9,16 @@ import ai.ChessAI;
 public class Game {
 	public static final int SIDE_LENGTH = 8;
 
-	private final GamePiece[][] board = new GamePiece[SIDE_LENGTH][SIDE_LENGTH];
+	private GamePiece[][] board = new GamePiece[SIDE_LENGTH][SIDE_LENGTH];
 	private PieceTeam currentTeam;
 	private boolean isAI;
 	private ChessAI ai;
-	private Stack<Move> moveStack;
+	private UndoStack undoStack;
 
 	public Game() {
 		reset();
 	}
 
-	public GamePiece[][] getBoard() {
-		return board;
-	}
 
 	public void clearBoard() {
 		for (final GamePiece[] arr : board) {
@@ -30,7 +27,7 @@ public class Game {
 	}
 
 	public void reset() {
-		moveStack = new Stack<>();
+		undoStack = new UndoStack();
 		setCurrentTeam(PieceTeam.WHITE);
 		clearBoard();
 		isAI = false;
@@ -76,31 +73,22 @@ public class Game {
 
 		if (board[start.y][start.x].isLegalMove(new Move(start, end),
 				getPiece(end), board)) {
-			board[start.y][start.x].setHasBeenMoved(true);
+			undoStack.doMove(this);
+			
+			getPiece(start).setHasBeenMoved(true);
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
 			swapTeams();
-
-			moveStack.push(move);
 			return true;
 		}
 		return false;
 	}
 
 	public void undo() {
-		// TODO: Account for pieces that were taken by moves
-		if (moveStack.isEmpty()) {
-			return;
-		}
-		final Move move = moveStack.pop().getInverse();
-		final Point end = move.end;
-		final Point start = move.start;
-		board[end.y][end.x] = board[start.y][start.x];
-		board[start.y][start.x] = null;
-		swapTeams();
+		undoStack.undo(this);
 	}
 
-	private final void swapTeams() {
+	final void swapTeams() {
 		if (getCurrentTeam() == PieceTeam.WHITE) {
 			setCurrentTeam(PieceTeam.BLACK);
 		} else if (getCurrentTeam() == PieceTeam.BLACK) {
@@ -165,5 +153,14 @@ public class Game {
 
 	public void setAiAlgorithm(ChessAI ai) {
 		this.ai = ai;
+	}
+
+	public void setBoard(GamePiece[][] board){
+		this.board = board;
+	}
+
+
+	public GamePiece[][] getBoard() {
+		return board;
 	}
 }

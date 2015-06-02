@@ -12,6 +12,12 @@ public class GamePiece {
 		this.team = team;
 	}
 
+	private GamePiece(PieceType type, PieceTeam team, boolean hasBeenMoved) {
+		this.type = type;
+		this.team = team;
+		this.hasBeenMoved = hasBeenMoved;
+	}
+
 	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile,
 			final GamePiece[][] board) {
 		return type.isLegalMove.call(this, pieceOnEndTile, board, move);
@@ -61,5 +67,9 @@ public class GamePiece {
 			return false;
 		}
 		return true;
+	}
+
+	public GamePiece copy() {
+		return new GamePiece(type, team, hasBeenMoved);
 	}
 }

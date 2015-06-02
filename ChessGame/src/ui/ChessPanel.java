@@ -2,7 +2,14 @@ package ui;
 
 import java.awt.event.ItemEvent;
 
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,6 +24,16 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ChessPanel extends JPanel {
 
+	public JCheckBox aiToggle;
+	public JPanel gamePanel;
+	private JSplitPane jSplitPane1;
+	private JButton loadButton;
+	private JPanel menuPanel;
+	private JButton newGameButton;
+	private JButton saveButton;
+	private JLabel titleLabel;
+	private JButton undoButton;
+	
 	/**
 	 * Creates new form ChessPanel
 	 *
@@ -35,20 +52,20 @@ public class ChessPanel extends JPanel {
 	 */
 	private void initComponents(final JPanel panel, final ChessUIResponder uiResponder) {
 
-		jSplitPane1 = new javax.swing.JSplitPane();
-		menuPanel = new javax.swing.JPanel();
-		newGameButton = new javax.swing.JButton();
-		titleLabel = new javax.swing.JLabel();
-		undoButton = new javax.swing.JButton();
-		loadButton = new javax.swing.JButton();
-		saveButton = new javax.swing.JButton();
-		aiToggle = new javax.swing.JCheckBox();
+		jSplitPane1 = new JSplitPane();
+		menuPanel = new JPanel();
+		newGameButton = new JButton();
+		titleLabel = new JLabel();
+		undoButton = new JButton();
+		loadButton = new JButton();
+		saveButton = new JButton();
+		aiToggle = new JCheckBox();
 		gamePanel = panel;
 
 		newGameButton.setText("New Game");
 		newGameButton.addActionListener(uiResponder::newGameClicked);
 
-		titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLabel.setText("Java Chess");
 
 		undoButton.setText("Undo");
@@ -63,60 +80,48 @@ public class ChessPanel extends JPanel {
 		aiToggle.setText("AI");
 		aiToggle.addItemListener((r) -> uiResponder.aiSet(r.getStateChange() == ItemEvent.SELECTED));
 
-		final javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
+		final GroupLayout menuPanelLayout = new GroupLayout(menuPanel);
 		menuPanel.setLayout(menuPanelLayout);
-		menuPanelLayout.setHorizontalGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				javax.swing.GroupLayout.Alignment.TRAILING,
+		menuPanelLayout.setHorizontalGroup(menuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+				GroupLayout.Alignment.TRAILING,
 				menuPanelLayout
 						.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(
 								menuPanelLayout
-						.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-						.addComponent(titleLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(newGameButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(undoButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(loadButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(saveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(aiToggle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+						.createParallelGroup(GroupLayout.Alignment.TRAILING)
+						.addComponent(titleLabel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(newGameButton, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(undoButton, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(loadButton, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(saveButton, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(aiToggle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 																		Short.MAX_VALUE)).addContainerGap()));
-		menuPanelLayout.setVerticalGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				javax.swing.GroupLayout.Alignment.TRAILING,
+		menuPanelLayout.setVerticalGroup(menuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+				GroupLayout.Alignment.TRAILING,
 				menuPanelLayout.createSequentialGroup().addContainerGap().addComponent(titleLabel)
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE).addComponent(newGameButton)
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(saveButton)
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(loadButton)
-				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(undoButton)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(aiToggle).addGap(10, 10, 10)));
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE).addComponent(newGameButton)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(saveButton)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(loadButton)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(undoButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(aiToggle).addGap(10, 10, 10)));
 
 		jSplitPane1.setLeftComponent(menuPanel);
 
-		final javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
+		final GroupLayout gamePanelLayout = new GroupLayout(gamePanel);
 		gamePanel.setLayout(gamePanelLayout);
-		gamePanelLayout.setHorizontalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 293,
+		gamePanelLayout.setHorizontalGroup(gamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 293,
 				Short.MAX_VALUE));
-		gamePanelLayout.setVerticalGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 298,
+		gamePanelLayout.setVerticalGroup(gamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 298,
 				Short.MAX_VALUE));
 
 		jSplitPane1.setRightComponent(gamePanel);
 		jSplitPane1.setEnabled(false);
 		add(jSplitPane1);
 	}
-
-	// Variables declaration - do not modify
-	public javax.swing.JCheckBox aiToggle;
-	public javax.swing.JPanel gamePanel;
-	private javax.swing.JSplitPane jSplitPane1;
-	private javax.swing.JButton loadButton;
-	private javax.swing.JPanel menuPanel;
-	private javax.swing.JButton newGameButton;
-	private javax.swing.JButton saveButton;
-	private javax.swing.JLabel titleLabel;
-	private javax.swing.JButton undoButton;
-	// End of variables declaration
 }
