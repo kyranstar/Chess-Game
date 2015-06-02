@@ -76,6 +76,7 @@ public class Game {
 
 		if (board[start.y][start.x].isLegalMove(new Move(start, end),
 				getPiece(end), board)) {
+			board[start.y][start.x].setHasBeenMoved(true);
 			board[end.y][end.x] = board[start.y][start.x];
 			board[start.y][start.x] = null;
 			swapTeams();

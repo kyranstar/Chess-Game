@@ -3,7 +3,8 @@ package game;
 import static java.lang.Math.abs;
 
 public enum PieceType {
-	PAWN('p', (team, pieceOnEndTile, board, move) -> {
+	PAWN('p', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		final boolean willKill = pieceOnEndTile != null && pieceOnEndTile.getTeam() != team;
@@ -15,29 +16,34 @@ public enum PieceType {
 		dy = dy * direction;
 		boolean isKilling = willKill && dy == 1 && abs(dx) == 1;
 		boolean isMoving1 = dy == 1 && dx == 0 && pieceOnEndTile == null;
-		boolean isMoving2 = dy == 2 && dx == 0 && pieceOnEndTile == null; // TODO: only allow this for first move
+		boolean isMoving2 = dy == 2 && dx == 0 && pieceOnEndTile == null && !piece.hasBeenMoved();
 
 		return isKilling || isMoving1 || isMoving2;
 
-	}), BISHOP('b', (team, pieceOnEndTile, board, move) -> {
+	}), BISHOP('b', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		return abs(dy) == abs(dx) && tileIsEmptyOrEnemy(pieceOnEndTile, team) && !pieceInWay(board, move, team);
-	}), KNIGHT('k', (team, pieceOnEndTile, board, move) -> {
+	}), KNIGHT('k', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		boolean isCorrectMove = (abs(dy) == abs(2 * dx) || (abs(dx) == abs(2 * dy))) && abs(dy) <= 2 && abs(dx) <= 2;
-		
+
 		return isCorrectMove && tileIsEmptyOrEnemy(pieceOnEndTile, team);
-	}), ROOK('r', (team, pieceOnEndTile, board, move) -> {
+	}), ROOK('r', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		return (abs(dy) >= 1 && abs(dx) == 0 || abs(dx) >= 1 && abs(dy) == 0) && tileIsEmptyOrEnemy(pieceOnEndTile, team) && !pieceInWay(board, move, team);
-	}), QUEEN('Q', (team, pieceOnEndTile, board, move) -> {
+	}), QUEEN('Q', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		return (abs(dy) == abs(dx) || abs(dy) >= 1 && abs(dx) == 0 || abs(dx) >= 1 && abs(dy) == 0) && tileIsEmptyOrEnemy(pieceOnEndTile, team) && !pieceInWay(board, move, team);
-	}), KING('K', (team, pieceOnEndTile, board, move) -> {
+	}), KING('K', (piece, pieceOnEndTile, board, move) -> {
+		PieceTeam team = piece.getTeam();
 		int dx = move.getdx();
 		int dy = move.getdy();
 		return abs(dy) <= 1 && abs(dx) <= 1 && tileIsEmptyOrEnemy(pieceOnEndTile, team);
@@ -51,9 +57,10 @@ public enum PieceType {
 		this.representation = representation;
 	}
 
-	private static boolean tileIsEmptyOrEnemy(GamePiece piece, PieceTeam currentTeam){
+	private static boolean tileIsEmptyOrEnemy(GamePiece piece, PieceTeam currentTeam) {
 		return piece == null || piece.getTeam() != currentTeam;
 	}
+
 	// This function doesn't work????
 	private static boolean pieceInWay(GamePiece[][] board, Move move, PieceTeam team) {
 		int changerx = (int) Math.signum(move.getdx());
@@ -68,7 +75,7 @@ public enum PieceType {
 
 	@FunctionalInterface
 	public static interface IsLegalMove {
-		public boolean call(PieceTeam team, GamePiece pieceOnEndTile, GamePiece[][] board, Move move);
+		public boolean call(GamePiece piece, GamePiece pieceOnEndTile, GamePiece[][] board, Move move);
 	}
 
 }

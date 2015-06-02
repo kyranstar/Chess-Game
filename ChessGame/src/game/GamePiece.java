@@ -14,7 +14,7 @@ public class GamePiece {
 
 	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile,
 			final GamePiece[][] board) {
-		return type.isLegalMove.call(team, pieceOnEndTile, board, move);
+		return type.isLegalMove.call(this, pieceOnEndTile, board, move);
 	}
 
 	public PieceType getType() {
@@ -23,6 +23,14 @@ public class GamePiece {
 
 	public PieceTeam getTeam() {
 		return team;
+	}
+
+	public boolean hasBeenMoved() {
+		return hasBeenMoved;
+	}
+
+	public void setHasBeenMoved(boolean hasBeenMoved) {
+		this.hasBeenMoved = hasBeenMoved;
 	}
 
 	@Override
