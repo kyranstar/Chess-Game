@@ -55,8 +55,8 @@ public class Game {
 	}
 
 	/**
-	 * is the other spot empty, if not is the piece there of the opposite team
-	 * is the move legal if all true, piece is moved and true is returned
+	 * is the other spot empty, if not is the piece there of the opposite team is the move legal if all true, piece is
+	 * moved and true is returned
 	 *
 	 * @param move
 	 * @return whether the move was successful
@@ -148,11 +148,11 @@ public class Game {
 		return ai;
 	}
 
-	public void setAiAlgorithm(ChessAI ai) {
+	public void setAiAlgorithm(final ChessAI ai) {
 		this.ai = ai;
 	}
 
-	public void setBoard(GamePiece[][] board) {
+	public void setBoard(final GamePiece[][] board) {
 		this.board = board;
 	}
 
@@ -160,8 +160,9 @@ public class Game {
 		return board;
 	}
 
-	public boolean isCheckM8(PieceTeam team) {
-		List<GamePiece[][]> unsafeTeamMoves = new ArrayList<>();
+	public boolean isCheckM8(final PieceTeam team) {
+		final List<GamePiece[][]> unsafeTeamMoves = new ArrayList<>();
+		return false;
 
 	}
 }
