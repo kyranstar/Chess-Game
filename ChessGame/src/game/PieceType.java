@@ -17,7 +17,7 @@ public enum PieceType {
 		dy = dy * direction;
 		final boolean isKilling = willKill && dy == 1 && abs(dx) == 1;
 		final boolean isMoving1 = dy == 1 && dx == 0 && pieceOnEndTile == null;
-		final boolean isMoving2 = dy == 2 && dx == 0 && pieceOnEndTile == null && !piece.hasBeenMoved();
+		final boolean isMoving2 = dy == 2 && dx == 0 && pieceOnEndTile == null && !piece.hasBeenMoved() && !pieceInWay(board, move);
 
 		return isKilling || isMoving1 || isMoving2;
 

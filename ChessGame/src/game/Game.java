@@ -1,9 +1,9 @@
 package game;
 
+import helper.Logger;
+
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import ai.ChessAI;
 
@@ -82,6 +82,11 @@ public class Game {
 		board[end.y][end.x] = board[start.y][start.x];
 		board[start.y][start.x] = null;
 		swapTeams();
+		if (isCheckMate(currentTeam)) {
+			Logger.info("Check mate! Team " + currentTeam + " loses!");
+		} else if (isCheck(currentTeam, board)) {
+			Logger.info("Team " + currentTeam + " is in check!");
+		}
 		return true;
 	}
 
@@ -164,16 +169,20 @@ public class Game {
 	public boolean isCheckMate(PieceTeam team) {
 		for (int x = 0; x < SIDE_LENGTH; x++) {
 			for (int y = 0; y < SIDE_LENGTH; y++) {
-				if(board[y][x] == null) continue;
-				if(board[y][x].getTeam() != team) continue;
-				
+				if (board[y][x] == null)
+					continue;
+				if (board[y][x].getTeam() != team)
+					continue;
+
 				// For each piece on team, check if they have any legal moves
 				for (int x1 = 0; x1 < SIDE_LENGTH; x1++) {
 					for (int y1 = 0; y1 < SIDE_LENGTH; y1++) {
-						Move move = new Move(new Point(x,y), new Point(x1, y1));
-						if(board[y][x].isLegalMove(move, getPiece(x1,y1), board)){
-							// If this move is legal, check if it gets our team out of check
-							if(!isCheck(move, team)) return false;
+						Move move = new Move(new Point(x, y), new Point(x1, y1));
+						if (board[y][x].isLegalMove(move, getPiece(x1, y1), board)) {
+							// If this move is legal, check if it gets our team
+							// out of check
+							if (!isCheck(move, team))
+								return false;
 						}
 					}
 				}
@@ -200,6 +209,10 @@ public class Game {
 		newBoard[end.y][end.x] = board[start.y][start.x];
 		newBoard[start.y][start.x] = null;
 
+		return isCheck(currentTeam, newBoard);
+	}
+
+	private static boolean isCheck(PieceTeam currentTeam, GamePiece[][] newBoard) {
 		Point currentTeamKing = getKingPosition(currentTeam, newBoard);
 		// see if any enemy can attack the king at the new position
 		for (int x = 0; x < SIDE_LENGTH; x++) {
