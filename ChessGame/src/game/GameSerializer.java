@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GameSerializer {
 
-	private static final char NULL = 'N';
+	private static final char NULL = '*';
 
 	// N = null
 

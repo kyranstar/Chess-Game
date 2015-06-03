@@ -18,14 +18,14 @@ public class GameSerializerTest extends GameSerializer {
 
 	@Test
 	public void testLoad() throws IOException {
-		final String file = "pWQBrWNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
-				"NNNNNNNNNNNNNNNN\n" + //
+		final String file = "pWQBrW**********\n" + //
+				"****************\n" + //
+				"****************\n" + //
+				"****************\n" + //
+				"****************\n" + //
+				"****************\n" + //
+				"****************\n" + //
+				"****************\n" + //
 				"white\n" + // white team currently
 				"true"; // ai true
 		final Game game = GameSerializer.load(new ByteArrayInputStream(file.getBytes(StandardCharsets.UTF_8)));
@@ -48,7 +48,7 @@ public class GameSerializerTest extends GameSerializer {
 		assertEquals("pBpBpBpBpBpBpBpB", content[1]);
 
 		for (int i = 2; i < 6; i++) {
-			assertEquals("NNNNNNNNNNNNNNNN", content[i]);
+			assertEquals("****************", content[i]);
 		}
 
 		assertEquals("pWpWpWpWpWpWpWpW", content[6]);
