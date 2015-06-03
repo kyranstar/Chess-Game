@@ -69,20 +69,20 @@ public class Game {
 		if (board[start.y][start.x].getTeam() != getCurrentTeam()) {
 			return false;
 		}
-		if(isCheck(move, currentTeam)){
+		if (!board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end), board)) {
 			return false;
 		}
-		
-		if (board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end), board)) {
-			undoStack.doMove(this);
-
-			getPiece(start).setHasBeenMoved(true);
-			board[end.y][end.x] = board[start.y][start.x];
-			board[start.y][start.x] = null;
-			swapTeams();
-			return true;
+		if (isCheck(move, currentTeam)) {
+			return false;
 		}
-		return false;
+
+		undoStack.doMove(this);
+
+		getPiece(start).setHasBeenMoved(true);
+		board[end.y][end.x] = board[start.y][start.x];
+		board[start.y][start.x] = null;
+		swapTeams();
+		return true;
 	}
 
 	public void undo() {
@@ -107,11 +107,9 @@ public class Game {
 		for (final GamePiece[] row : board) {
 			for (final GamePiece g : row) {
 				if (g == null) {
-					out.append('X');
+					out.append('*');
 				} else {
-					// Print lower case 'k' for knight so it doesn't conflict
-					// with 'K'ing
-					out.append(g.getType() == PieceType.KNIGHT ? 'k' : g.getType().toString().charAt(0));
+					out.append(g.getType().representation);
 				}
 			}
 			out.append('\n');
@@ -163,72 +161,76 @@ public class Game {
 		return board;
 	}
 
-	public boolean isCheckM8(PieceTeam team) {
-		MoveSet defendingMoves = new MoveSet();
-		List<MoveSet> attackingMoves = new ArrayList<>();
-
-		for (int y1 = 0; y1 < 8; y1++) {
-			for (int x1 = 0; x1 < 8; x1++) {
-				for (int y2 = 0; y2 < 8; y2++) {
-					for (int x2 = 0; x2 < 8; x2++) {
-						if (board[y1][x1].isLegalMove(new Move(new Point(x1, y1), new Point(x2, y2)), getPiece(x2, y2), board)) {
-							defendingMoves.moves.add(new Move(new Point(x1, y1), new Point(x2, y2)));
-							GamePiece[][] movedBoard = Game.copyBoard(board);
-							movedBoard[y2][x2] = movedBoard[y1][x1];
-							movedBoard[y1][x1] = null;
-							defendingMoves.boards.add(movedBoard);
+	public boolean isCheckMate(PieceTeam team) {
+		for (int x = 0; x < SIDE_LENGTH; x++) {
+			for (int y = 0; y < SIDE_LENGTH; y++) {
+				if(board[y][x] == null) continue;
+				if(board[y][x].getTeam() != team) continue;
+				
+				// For each piece on team, check if they have any legal moves
+				for (int x1 = 0; x1 < SIDE_LENGTH; x1++) {
+					for (int y1 = 0; y1 < SIDE_LENGTH; y1++) {
+						Move move = new Move(new Point(x,y), new Point(x1, y1));
+						if(board[y][x].isLegalMove(move, getPiece(x1,y1), board)){
+							// If this move is legal, check if it gets our team out of check
+							if(!isCheck(move, team)) return false;
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return true;
 	}
+
 	/**
 	 * Tells whether the team would be in check after the move is done
+	 * 
 	 * @param move
-	 * @param currentTeam the team to check if is in check
+	 * @param currentTeam
+	 *            the team to check if is in check
 	 * @return
 	 */
-	public boolean isCheck(Move move, PieceTeam currentTeam){
+	public boolean isCheck(Move move, PieceTeam currentTeam) {
 		GamePiece[][] newBoard = copyBoard(getBoard());
 		Point start = move.start;
 		Point end = move.end;
-		
+
 		// Do move
 		newBoard[start.y][start.x].setHasBeenMoved(true);
 		newBoard[end.y][end.x] = board[start.y][start.x];
 		newBoard[start.y][start.x] = null;
-		
+
 		Point currentTeamKing = getKingPosition(currentTeam, newBoard);
 		// see if any enemy can attack the king at the new position
-		for(int x = 0; x < SIDE_LENGTH; x++){
-			for(int y = 0; y < SIDE_LENGTH; y++){
-				if(newBoard[y][x] == null || newBoard[y][x].getTeam() == currentTeam) continue;
-				
-				if(newBoard[y][x].isLegalMove(new Move(new Point(x,y), currentTeamKing), newBoard[currentTeamKing.y][currentTeamKing.x], newBoard)){
+		for (int x = 0; x < SIDE_LENGTH; x++) {
+			for (int y = 0; y < SIDE_LENGTH; y++) {
+				if (newBoard[y][x] == null || newBoard[y][x].getTeam() == currentTeam)
+					continue;
+
+				if (newBoard[y][x].isLegalMove(new Move(new Point(x, y), currentTeamKing), newBoard[currentTeamKing.y][currentTeamKing.x], newBoard)) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
 	private static Point getKingPosition(PieceTeam team, GamePiece[][] board) {
-		for(int x = 0; x < SIDE_LENGTH; x++){
-			for(int y = 0; y < SIDE_LENGTH; y++){
-				if(board[y][x] != null && board[y][x].getTeam() == team && board[y][x].getType() == PieceType.KING){
-					return new Point(x,y);
+		for (int x = 0; x < SIDE_LENGTH; x++) {
+			for (int y = 0; y < SIDE_LENGTH; y++) {
+				if (board[y][x] != null && board[y][x].getTeam() == team && board[y][x].getType() == PieceType.KING) {
+					return new Point(x, y);
 				}
 			}
 		}
 		throw new RuntimeException("No king found for team " + team);
 	}
-	public static final GamePiece[][] copyBoard(GamePiece[][] board){
+
+	public static final GamePiece[][] copyBoard(GamePiece[][] board) {
 		GamePiece[][] arr = new GamePiece[board.length][board[0].length];
-		for(int i = 0; i < arr.length; i++){
-			for(int j = 0; j < arr[i].length; j++){
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr[i].length; j++) {
 				arr[i][j] = board[i][j] == null ? null : board[i][j].copy();
 			}
 		}

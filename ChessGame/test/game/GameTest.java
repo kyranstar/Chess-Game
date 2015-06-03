@@ -1,6 +1,9 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -37,5 +40,21 @@ public class GameTest {
 			assertEquals(PieceType.PAWN, game.getPiece(i, 1).getType());
 			assertEquals(PieceType.PAWN, game.getPiece(i, 6).getType());
 		}
+	}
+
+	@Test
+	public void checkMateTest() throws IOException {
+		final Game g = GameSerializer.load(new ByteArrayInputStream(//
+				("rBkBbBQBKBbBkBrB\n" + //
+				"pBpBpBpBpB******\n" + //
+				"************QWpB\n" + //
+				"**********pB****\n" + //
+				"********pW******\n" + //
+				"**********kW****\n" + //
+				"pWpWpWpW**pWpWpW\n" + //
+				"rWkWbW**KWbW**rW\n" + //
+				"BLACK\n" + //
+				"false").getBytes()));
+		assertTrue(g.isCheckMate(PieceTeam.BLACK));
 	}
 }
