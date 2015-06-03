@@ -161,7 +161,25 @@ public class Game {
 	}
 
 	public boolean isCheckM8(PieceTeam team) {
-		List<GamePiece[][]> unsafeTeamMoves = new ArrayList<>();
+		MoveSet defendingMoves = new MoveSet();
+		List<MoveSet> attackingMoves = new ArrayList<>();
+
+		for (int y1 = 0; y1 < 8; y1++) {
+			for (int x1 = 0; x1 < 8; x1++) {
+				for (int y2 = 0; y2 < 8; y2++) {
+					for (int x2 = 0; x2 < 8; x2++) {
+						if (board[y1][x1].isLegalMove(new Move(new Point(x1, y1), new Point(x2, y2)), getPiece(x2, y2), board)) {
+							defendingMoves.moves.add(new Move(new Point(x1, y1), new Point(x2, y2)));
+							GamePiece[][] movedBoard = board.clone();
+							movedBoard[y2][x2] = movedBoard[y1][x1];
+							movedBoard[y1][x1] = null;
+							defendingMoves.boards.add(movedBoard);
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
+
 }
