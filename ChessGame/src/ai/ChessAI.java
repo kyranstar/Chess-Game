@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class ChessAI {
 
+	@SuppressWarnings("serial")
 	private static final Map<PieceType, Integer> TYPE_TO_SCORE = Collections.unmodifiableMap(new HashMap<PieceType, Integer>() {
 		{
 			put(PieceType.PAWN, 100);
@@ -28,7 +29,7 @@ public class ChessAI {
 
 	// Tables from https://chessprogramming.wikispaces.com/Simplified+evaluation+function
 	//@formatter:off
-	private static Integer[] BlackPawnSquareTable = new Integer[]
+	private static Integer[] PAWN_TABLE = new Integer[]
 			{
 		0,  0,  0,  0,  0,  0,  0,  0,
 		5, 10, 10,-20,-20, 10, 10,  5,
@@ -39,7 +40,7 @@ public class ChessAI {
 		50, 50, 50, 50, 50, 50, 50, 50,
 		0,  0,  0,  0,  0,  0,  0,  0
 			};
-	private static Integer[] BlackKnightSquareTable = new Integer[]
+	private static Integer[] KNIGHT_TABLE = new Integer[]
 			{
 		-50,-40,-30,-30,-30,-30,-40,-50,
 		-40,-20,  0,  5,  5,  0,-20,-40,
@@ -51,7 +52,7 @@ public class ChessAI {
 		-50,-40,-30,-30,-30,-30,-40,-50,
 			};
 
-	private static Integer[] BlackBishopSquareTable = new Integer[]
+	private static Integer[] BISHOP_TABLE = new Integer[]
 			{
 		-20,-10,-10,-10,-10,-10,-10,-20,
 		-10,  5,  0,  0,  0,  0,  5,-10,
@@ -62,7 +63,7 @@ public class ChessAI {
 		-10,  0,  0,  0,  0,  0,  0,-10,
 		-20,-10,-10,-10,-10,-10,-10,-20,
 			};
-	private static Integer[] BlackRookSquareTable = new Integer[]
+	private static Integer[] ROOK_TABLE = new Integer[]
 			{
 		0,  0,  0,  5,  5,  0,  0,  0,
 		-5,  0,  0,  0,  0,  0,  0, -5,
@@ -73,7 +74,7 @@ public class ChessAI {
 		5, 10, 10, 10, 10, 10, 10,  5,
 		0,  0,  0,  0,  0,  0,  0,  0,
 			};
-	private static Integer[] BlackQueenSquareTable = new Integer[]
+	private static Integer[] QUEEN_TABLE = new Integer[]
 			{
 		-20,-10,-10, -5, -5,-10,-10,-20,
 		-10,  0,  5,  0,  0,  0,  0,-10,
@@ -85,7 +86,7 @@ public class ChessAI {
 		-20,-10,-10, -5, -5,-10,-10,-20,
 			};
 
-	private static Integer[] BlackKingMiddleGameSquareTable = new Integer[]
+	private static Integer[] KING_MIDDLE_GAME_TABLE = new Integer[]
 			{
 		20, 30, 10,  0,  0, 10, 30, 20,
 		20, 20,  0,  0,  0,  0, 20, 20,
@@ -97,7 +98,7 @@ public class ChessAI {
 		-30,-40,-40,-50,-50,-40,-40,-30,
 			};
 
-	private static Integer[] BlackKingEndGameSquareTable = new Integer[]
+	private static Integer[] KING_END_GAME_TABLE = new Integer[]
 			{
 		-50,-30,-30,-30,-30,-30,-30,-50,
 		-30,-30,  0,  0,  0,  0,-30,-30,
@@ -109,15 +110,16 @@ public class ChessAI {
 		-50,-40,-30,-20,-20,-30,-40,-50,
 			};
 	//@formatter:on
+	@SuppressWarnings("serial")
 	private static final Map<PieceType, Integer[]> TYPE_TO_TABLE = Collections.unmodifiableMap(new HashMap<PieceType, Integer[]>() {
 		{
-			put(PieceType.PAWN, BlackPawnSquareTable);
-			put(PieceType.KNIGHT, BlackKnightSquareTable);
-			put(PieceType.BISHOP, BlackBishopSquareTable);
-			put(PieceType.ROOK, BlackRookSquareTable);
-			put(PieceType.QUEEN, BlackQueenSquareTable);
+			put(PieceType.PAWN, PAWN_TABLE);
+			put(PieceType.KNIGHT, /* Round ;) */KNIGHT_TABLE);
+			put(PieceType.BISHOP, BISHOP_TABLE);
+			put(PieceType.ROOK, ROOK_TABLE);
+			put(PieceType.QUEEN, QUEEN_TABLE);
 			// TODO End game too
-			put(PieceType.KING, BlackKingMiddleGameSquareTable);
+			put(PieceType.KING, KING_MIDDLE_GAME_TABLE);
 		}
 	});
 
@@ -141,8 +143,8 @@ public class ChessAI {
 			doMove(second, o2);
 
 			// best moves lowest
-				return evaluate(before, second) - evaluate(before, first);
-			});
+			return evaluate(before, second) - evaluate(before, first);
+		});
 		return validMoves.get(0);
 	}
 
