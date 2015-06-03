@@ -4,7 +4,7 @@ package game;
 public class GamePiece {
 	
    	private boolean hasBeenMoved = false;
-	private final PieceType type;
+	private PieceType type;
 	private final PieceTeam team;
 
 	public GamePiece(final PieceType type, final PieceTeam team) {
@@ -71,5 +71,12 @@ public class GamePiece {
 
 	public GamePiece copy() {
 		return new GamePiece(type, team, hasBeenMoved);
+	}
+
+	public void promoteToQueen() {
+		if(!(getType() == PieceType.PAWN)){
+			throw new RuntimeException("Non-pawns cannot be promoted to queen!");
+		}
+		type = PieceType.QUEEN;
 	}
 }

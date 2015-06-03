@@ -81,6 +81,11 @@ public class Game {
 		getPiece(start).setHasBeenMoved(true);
 		board[end.y][end.x] = board[start.y][start.x];
 		board[start.y][start.x] = null;
+		// Promote pawns
+		if(getPiece(end).getType() == PieceType.PAWN && (end.y == 0 || end.y == SIDE_LENGTH - 1)){
+			getPiece(end).promoteToQueen();
+		}
+		
 		swapTeams();
 		if (isCheckMate(currentTeam)) {
 			Logger.info("Check mate! Team " + currentTeam + " loses!");
