@@ -127,8 +127,8 @@ public class GameUI {
 					// If it's a legal move, draw the highlight color
 					final Move move = new Move(pressTile, new Point(x, y));
 
-					if (getGame().getPiece(pressTile).isLegalMove(move,
-							game.getPiece(x, y), game.getBoard())) {
+					if (game.getPiece(pressTile).isLegalMove(move,
+							game.getPiece(x, y), game.getBoard()) && !game.isCheck(move, game.getCurrentTeam())) {
 						g.setColor(highlightColor);
 						g.fillRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH,
 								TILE_HEIGHT);

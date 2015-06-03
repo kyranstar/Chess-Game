@@ -17,10 +17,6 @@ public class Move {
 		this.end = end;
 	}
 
-	public Move getInverse() {
-		return new Move(end, start);
-	}
-
 	public int getdx() {
 		return end.x - start.x;
 	}
