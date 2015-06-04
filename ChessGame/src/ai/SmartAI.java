@@ -17,28 +17,25 @@ public class SmartAI extends ChessAI {
 	 *         github
 	 */
 
-	public Move getNextMove(Move mostRecent, Game game, int plies, PieceTeam team) {
+	public Move getNextMove(Move mostRecent, Game game) {
 		// all legal black moves
 		// eval top 10
 		// for all 10, get all legal white moves and top 10
 		// get top 10 black moves for each of those
 		// eval board
 
-		// recursive function that runs plies times and returns best move
-
-		ArrayList<Move> tenBest = tenBestMoves(getLegalMoves(PieceTeam.BLACK, game.getBoard()));
-		if (plies == 0) {
-			return tenBest.get(0);
+		Move[] tenBestBlack = tenBestMoves(getLegalMoves(PieceTeam.BLACK, game.getBoard()));
+		Move[][][] tenBestWhites = new Move[10][10][10];
+		for(int i = 0; i < 10; i++){
+			tenBestWhites[i][] = tenBestMoves(getLegalMoves(PieceTeam.WHITE, tenBestBlack[i].getFinalBoard()));
 		}
-		return null; // TODO: IMPLEMENT
-
 	}
 
 	// returns sorted list of 10 best moves based on criteria (sorted best to
 	// worst
-	private ArrayList<Move> tenBestMoves(ArrayList<Move> moves) {
+	private Move[] tenBestMoves(ArrayList<Move> moves) {
 		Collections.sort(moves); // moves score themselves and are sorted
-		return new ArrayList<Move>(moves.subList(0, 10));
+		return new ArrayList<Move>(moves.subList(0, 10)).toArray(new Move[10]);
 	}
 
 	// returns all legal moves doable by the specified team
