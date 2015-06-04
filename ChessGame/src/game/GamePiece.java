@@ -1,9 +1,8 @@
 package game;
- 
 
 public class GamePiece {
-	
-   	private boolean hasBeenMoved = false;
+
+	private boolean hasBeenMoved = false;
 	private final PieceType type;
 	private final PieceTeam team;
 
@@ -18,9 +17,8 @@ public class GamePiece {
 		this.hasBeenMoved = hasBeenMoved;
 	}
 
-	public boolean isLegalMove(final Move move, final GamePiece pieceOnEndTile,
-			final GamePiece[][] board) {
-		return type.isLegalMove.call(this, pieceOnEndTile, board, move);
+	public boolean isLegalMove(final Move move, final GamePiece[][] board) {
+		return type.isLegalMove.call(this, board[move.end.y][move.end.x], board, move);
 	}
 
 	public PieceType getType() {

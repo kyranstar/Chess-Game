@@ -18,7 +18,7 @@ public class PieceTypeTest {
 	@Test
 	public void testPawn() throws IOException {
 		final String board = //
-		"****************\n" + //
+				"****************\n" + //
 				"****************\n" + //
 				"****************\n" + //
 				"****************\n" + //
@@ -94,7 +94,7 @@ public class PieceTypeTest {
 	private void assertIsValid(final boolean assertTrue, final String board, final Point piece, final List<Point> places) throws IOException {
 		final Game g = GameSerializer.load(new ByteArrayInputStream(board.getBytes()));
 		for (final Point place : places) {
-			final boolean isLegal = g.getPiece(piece).isLegalMove(new Move(new Point(piece), new Point(place)), g.getPiece(place), g.getBoard());
+			final boolean isLegal = g.getPiece(piece).isLegalMove(new Move(new Point(piece), new Point(place)), g.getBoard());
 			if (assertTrue) {
 				assertTrue(isLegal);
 			} else {

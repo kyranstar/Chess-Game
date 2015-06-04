@@ -13,8 +13,9 @@ public class Game {
 	private GamePiece[][] board = new GamePiece[SIDE_LENGTH][SIDE_LENGTH];
 	private PieceTeam currentTeam;
 	private boolean isAI;
-	private ChessAI ai;
+	private ChessAI ai = new ChessAI();
 	private UndoStack undoStack;
+	public Move mostRecentMove;
 
 	public Game() {
 		reset();
@@ -69,7 +70,7 @@ public class Game {
 		if (board[start.y][start.x].getTeam() != getCurrentTeam()) {
 			return false;
 		}
-		if (!board[start.y][start.x].isLegalMove(new Move(start, end), getPiece(end), board)) {
+		if (!board[start.y][start.x].isLegalMove(new Move(start, end), board)) {
 			return false;
 		}
 		if (isCheck(move, currentTeam)) {
@@ -169,20 +170,23 @@ public class Game {
 	public boolean isCheckMate(PieceTeam team) {
 		for (int x = 0; x < SIDE_LENGTH; x++) {
 			for (int y = 0; y < SIDE_LENGTH; y++) {
-				if (board[y][x] == null)
+				if (board[y][x] == null) {
 					continue;
-				if (board[y][x].getTeam() != team)
+				}
+				if (board[y][x].getTeam() != team) {
 					continue;
+				}
 
 				// For each piece on team, check if they have any legal moves
 				for (int x1 = 0; x1 < SIDE_LENGTH; x1++) {
 					for (int y1 = 0; y1 < SIDE_LENGTH; y1++) {
 						Move move = new Move(new Point(x, y), new Point(x1, y1));
-						if (board[y][x].isLegalMove(move, getPiece(x1, y1), board)) {
+						if (board[y][x].isLegalMove(move, board)) {
 							// If this move is legal, check if it gets our team
 							// out of check
-							if (!isCheck(move, team))
+							if (!isCheck(move, team)) {
 								return false;
+							}
 						}
 					}
 				}
@@ -193,7 +197,7 @@ public class Game {
 
 	/**
 	 * Tells whether the team would be in check after the move is done
-	 * 
+	 *
 	 * @param move
 	 * @param currentTeam
 	 *            the team to check if is in check
@@ -217,10 +221,11 @@ public class Game {
 		// see if any enemy can attack the king at the new position
 		for (int x = 0; x < SIDE_LENGTH; x++) {
 			for (int y = 0; y < SIDE_LENGTH; y++) {
-				if (newBoard[y][x] == null || newBoard[y][x].getTeam() == currentTeam)
+				if (newBoard[y][x] == null || newBoard[y][x].getTeam() == currentTeam) {
 					continue;
+				}
 
-				if (newBoard[y][x].isLegalMove(new Move(new Point(x, y), currentTeamKing), newBoard[currentTeamKing.y][currentTeamKing.x], newBoard)) {
+				if (newBoard[y][x].isLegalMove(new Move(new Point(x, y), currentTeamKing), newBoard)) {
 					return true;
 				}
 			}
