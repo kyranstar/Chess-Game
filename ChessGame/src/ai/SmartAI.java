@@ -16,7 +16,7 @@ public class SmartAI extends ChessAI {
 	 * @return Smart version of ChessAI, copied to allow saving of ChessAI in
 	 *         github
 	 */
-	@Override
+
 	public Move getNextMove(Move mostRecent, Game game, int plies, PieceTeam team) {
 		// all legal black moves
 		// eval top 10

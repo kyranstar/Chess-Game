@@ -1,9 +1,11 @@
 package game;
 
+import helper.GameHelper;
 import helper.Logger;
 
 import java.awt.Point;
 import java.util.Arrays;
+//yo
 
 import ai.ChessAI;
 
@@ -82,6 +84,11 @@ public class Game {
 		getPiece(start).setHasBeenMoved(true);
 		board[end.y][end.x] = board[start.y][start.x];
 		board[start.y][start.x] = null;
+		// Promote pawns
+		if (getPiece(end).getType() == PieceType.PAWN && (end.y == 0 || end.y == SIDE_LENGTH - 1)) {
+			getPiece(end).promoteToQueen();
+		}
+
 		swapTeams();
 		if (isCheckMate(currentTeam)) {
 			Logger.info("Check mate! Team " + currentTeam + " loses!");
@@ -155,11 +162,11 @@ public class Game {
 		return ai;
 	}
 
-	public void setAiAlgorithm(ChessAI ai) {
+	public void setAiAlgorithm(final ChessAI ai) {
 		this.ai = ai;
 	}
 
-	public void setBoard(GamePiece[][] board) {
+	public void setBoard(final GamePiece[][] board) {
 		this.board = board;
 	}
 
@@ -203,10 +210,10 @@ public class Game {
 	 *            the team to check if is in check
 	 * @return
 	 */
-	public boolean isCheck(Move move, PieceTeam currentTeam) {
-		GamePiece[][] newBoard = copyBoard(getBoard());
-		Point start = move.start;
-		Point end = move.end;
+	public boolean isCheck(final Move move, final PieceTeam currentTeam) {
+		final GamePiece[][] newBoard = GameHelper.copyBoard(getBoard());
+		final Point start = move.start;
+		final Point end = move.end;
 
 		// Do move
 		newBoard[start.y][start.x].setHasBeenMoved(true);
@@ -216,8 +223,8 @@ public class Game {
 		return isCheck(currentTeam, newBoard);
 	}
 
-	private static boolean isCheck(PieceTeam currentTeam, GamePiece[][] newBoard) {
-		Point currentTeamKing = getKingPosition(currentTeam, newBoard);
+	private static boolean isCheck(final PieceTeam currentTeam, final GamePiece[][] newBoard) {
+		final Point currentTeamKing = getKingPosition(currentTeam, newBoard);
 		// see if any enemy can attack the king at the new position
 		for (int x = 0; x < SIDE_LENGTH; x++) {
 			for (int y = 0; y < SIDE_LENGTH; y++) {
@@ -234,7 +241,7 @@ public class Game {
 		return false;
 	}
 
-	private static Point getKingPosition(PieceTeam team, GamePiece[][] board) {
+	private static Point getKingPosition(final PieceTeam team, final GamePiece[][] board) {
 		for (int x = 0; x < SIDE_LENGTH; x++) {
 			for (int y = 0; y < SIDE_LENGTH; y++) {
 				if (board[y][x] != null && board[y][x].getTeam() == team && board[y][x].getType() == PieceType.KING) {
@@ -243,16 +250,6 @@ public class Game {
 			}
 		}
 		throw new RuntimeException("No king found for team " + team);
-	}
-
-	public static final GamePiece[][] copyBoard(GamePiece[][] board) {
-		GamePiece[][] arr = new GamePiece[board.length][board[0].length];
-		for (int i = 0; i < arr.length; i++) {
-			for (int j = 0; j < arr[i].length; j++) {
-				arr[i][j] = board[i][j] == null ? null : board[i][j].copy();
-			}
-		}
-		return arr;
 	}
 
 }

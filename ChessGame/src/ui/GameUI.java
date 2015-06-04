@@ -87,17 +87,17 @@ public class GameUI {
 					Logger.info("Invalid move");
 				} else {
 					game.mostRecentMove = new Move(pressTile, releaseTile); // KYRAN,
-																			// DO
-																			// NOT
-																			// CHANGE
-																			// THIS
-																			// TO
-																			// getGame()
-																			// OR
-																			// I
-																			// WILL
-																			// HURT
-																			// YOU
+					// DO
+					// NOT
+					// CHANGE
+					// THIS
+					// TO
+					// getGame()
+					// OR
+					// I
+					// WILL
+					// HURT
+					// YOU
 				}
 			}
 			pressTile = releaseTile = null;
@@ -110,8 +110,7 @@ public class GameUI {
 
 	public void update() {
 		if (getGame().isAI() && getGame().getAiAlgorithm() != null && getGame().getCurrentTeam() == PieceTeam.BLACK) {
-			boolean valid = getGame().move(
-					getGame().getAiAlgorithm().getNextMove(getGame().mostRecentMove, getGame(), PLIES, getGame().getCurrentTeam()));
+			boolean valid = getGame().move(getGame().getAiAlgorithm().getNextMove(getGame()));
 			if (!valid) {
 				Logger.error("AI failed! Move generated was not valid.");
 			}
@@ -130,12 +129,12 @@ public class GameUI {
 		}
 		// Highlight available moves
 		final Color highlightColor = new Color(190, 160, 50, 150); // a sulfur
-																	// yellow
-																	// with
-																	// hints of
-																	// barley
-																	// and
-																	// ash...
+		// yellow
+		// with
+		// hints of
+		// barley
+		// and
+		// ash...
 		if (pressTile != null && game.getPiece(pressTile) != null && game.getPiece(pressTile).getTeam() == game.getCurrentTeam()) {
 			for (int x = 0; x < Game.SIDE_LENGTH; x++) {
 				for (int y = 0; y < Game.SIDE_LENGTH; y++) {
