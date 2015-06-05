@@ -24,11 +24,36 @@ public class SmartAI extends ChessAI {
 		// get top 10 black moves for each of those
 		// eval board
 
-		Move[] tenBestBlack = tenBestMoves(getLegalMoves(PieceTeam.BLACK, game.getBoard()));
-		Move[][][] tenBestWhites = new Move[10][10][10];
-		for(int i = 0; i < 10; i++){
-			tenBestWhites[i][] = tenBestMoves(getLegalMoves(PieceTeam.WHITE, tenBestBlack[i].getFinalBoard()));
+		Move[] moves = tenBestMoves(getLegalMoves(PieceTeam.BLACK, game.getBoard()));
+		for (int i = 0; i < 10; i++) {
+			moves[i].nextMoves = tenBestMoves(getLegalMoves(PieceTeam.WHITE, moves[i].getFinalBoard()));
+			for (int j = 0; j < 10; j++) {
+				moves[i].nextMoves[j].nextMoves = tenBestMoves(getLegalMoves(PieceTeam.WHITE, moves[i].nextMoves[j].getFinalBoard()));
+			}
 		}
+		for (Move m : moves) {
+			for (Move n : m.nextMoves) {
+				n.cumulativeScore = n.nextMoves[0].getScore() + n.getScore();
+			}
+			int maxScore = m.nextMoves[0].getScore();
+			int ind = 0;
+			for (int i = 1; i < m.nextMoves.length; i++) {
+				if (m.nextMoves[i].getScore() > maxScore) {
+					maxScore = m.nextMoves[i].getFullScore();
+					ind = i;
+				}
+			}
+			m.cumulativeScore = m.getScore() + m.nextMoves[ind].getFullScore();
+		}
+		int maxCumScore = moves[0].getScore();
+		int ind = 0;
+		for (int i = 1; i < moves.length; i++) {
+			if (moves[i].cumulativeScore > maxCumScore) {
+				maxCumScore = moves[i].cumulativeScore;
+				ind = i;
+			}
+		}
+		return moves[ind];
 	}
 
 	// returns sorted list of 10 best moves based on criteria (sorted best to

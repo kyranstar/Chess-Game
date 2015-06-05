@@ -13,9 +13,11 @@ public class Move implements Comparable {
 	public final Point end;
 	private GamePiece[][] initialBoard;
 	private GamePiece[][] finalBoard;
-	private int cumulativeScore = 0; // score of this move and its resulting
-										// moves in each consecutive ply (used
-										// by AI)
+	public Move[] nextMoves = null;
+	public int cumulativeScore = 0; // score of this move and its resulting
+
+	// moves in each consecutive ply (used
+	// by AI)
 
 	public Move(final Point start, final Point end) {
 		this.start = start;
@@ -59,6 +61,14 @@ public class Move implements Comparable {
 		return 0;
 	}
 
+	public int getFullScore() {
+		if (nextMoves != null) {
+			return nextMoves[0].getScore() + getScore();
+		} else {
+			return getScore();
+		}
+	}
+
 	public int getScore() { // evaluate score
 		// move criteria:
 		// -gets out of check - required
@@ -68,6 +78,7 @@ public class Move implements Comparable {
 		// -checkmates enemy +100
 		// -moves to center +1
 		// -lose piece pawn: -3, bishop: -7, rook: -6, knight: -7, Queen: -9
+
 		return 0;
 	}
 }
