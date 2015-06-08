@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -32,6 +33,9 @@ public class GameUI {
 
 	private final JPanel panel;
 	private final Game game;
+
+	// whether game over was already shown
+	private boolean shownGameOver = false;
 
 	private final int PLIES = 3; // how many plies the AI will run
 
@@ -110,7 +114,16 @@ public class GameUI {
 
 	public void update() {
 		if (getGame().isAI() && getGame().getAiAlgorithm() != null && getGame().getCurrentTeam() == PieceTeam.BLACK) {
-			boolean valid = getGame().move(getGame().getAiAlgorithm().getNextMove(getGame()));
+			Move nextMove = getGame().getAiAlgorithm().getNextMove(getGame());
+			if (nextMove == null) {
+				if (!shownGameOver) {
+					JOptionPane.showConfirmDialog(null, "Checkmate! White player wins!");
+					shownGameOver = true;
+				}
+				return;
+			}
+
+			boolean valid = getGame().move(nextMove);
 			if (!valid) {
 				Logger.error("AI failed! Move generated was not valid.");
 			}
@@ -154,8 +167,7 @@ public class GameUI {
 			for (int y = 0; y < Game.SIDE_LENGTH; y++) {
 				final BufferedImage image = GraphicsConstants.getImage(getGame().getPiece(x, y));
 				// Draw drag point instead of original point
-				if (new Point(x, y).equals(pressTile) && getGame().getPiece(pressTile) != null
-						&& getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
+				if (new Point(x, y).equals(pressTile) && getGame().getPiece(pressTile) != null && getGame().getPiece(pressTile).getTeam() == getGame().getCurrentTeam()) {
 					g.drawImage(image, null, dragPoint.x - image.getWidth() / 2, dragPoint.y - image.getHeight() / 2);
 					continue;
 				}

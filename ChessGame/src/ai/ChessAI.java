@@ -6,12 +6,15 @@ import game.Move;
 import game.PieceTeam;
 import game.PieceType;
 import helper.GameHelper;
+import helper.Logger;
 
 import java.awt.Point;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 public class ChessAI {
 
@@ -145,6 +148,10 @@ public class ChessAI {
 			// best moves lowest
 			return evaluate(before, second) - evaluate(before, first);
 		});
+		if(validMoves.size() == 0){
+			return null;
+		}
+		
 		return validMoves.get(0);
 	}
 
