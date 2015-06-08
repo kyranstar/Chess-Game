@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Point;
 
+import ai.ChessAI;
+
 /**
  * Represents a move from one square to another.
  *
@@ -69,7 +71,8 @@ public class Move implements Comparable {
 		}
 	}
 
-	public int getScore() { // evaluate score
+	public int getScore() {
+		// evaluate score
 		// move criteria:
 		// -gets out of check - required
 		// -Kills enemy piece pawn: +3, bishop: +7, rook: +6, knight: +7, Queen:
@@ -79,6 +82,6 @@ public class Move implements Comparable {
 		// -moves to center +1
 		// -lose piece pawn: -3, bishop: -7, rook: -6, knight: -7, Queen: -9
 
-		return 0;
+		return ChessAI.evaluate(initialBoard, finalBoard);
 	}
 }

@@ -27,89 +27,32 @@ public class ChessAI {
 		}
 	});
 
-	// Tables from https://chessprogramming.wikispaces.com/Simplified+evaluation+function
-	//@formatter:off
-	private static Integer[] PAWN_TABLE = new Integer[]
-			{
-		0,  0,  0,  0,  0,  0,  0,  0,
-		5, 10, 10,-20,-20, 10, 10,  5,
-		5, -5,-10,  0,  0,-10, -5,  5,
-		0,  0,  0, 20, 20,  0,  0,  0,
-		5,  5, 10, 25, 25, 10,  5,  5,
-		10, 10, 20, 30, 30, 20, 10, 10,
-		50, 50, 50, 50, 50, 50, 50, 50,
-		0,  0,  0,  0,  0,  0,  0,  0
-			};
-	private static Integer[] KNIGHT_TABLE = new Integer[]
-			{
-		-50,-40,-30,-30,-30,-30,-40,-50,
-		-40,-20,  0,  5,  5,  0,-20,-40,
-		-30,  5, 10, 15, 15, 10,  5,-30,
-		-30,  0, 15, 20, 20, 15,  0,-30,
-		-30,  5, 15, 20, 20, 15,  5,-30,
-		-30,  0, 10, 15, 15, 10,  0,-30,
-		-40,-20,  0,  0,  0,  0,-20,-40,
-		-50,-40,-30,-30,-30,-30,-40,-50,
-			};
+	// Tables from
+	// https://chessprogramming.wikispaces.com/Simplified+evaluation+function
+	// @formatter:off
+	private static Integer[] PAWN_TABLE = new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, -20, -20, 10, 10, 5, 5, -5, -10, 0, 0, -10, -5, 5, 0, 0,
+			0, 20, 20, 0, 0, 0, 5, 5, 10, 25, 25, 10, 5, 5, 10, 10, 20, 30, 30, 20, 10, 10, 50, 50, 50, 50, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
+	private static Integer[] KNIGHT_TABLE = new Integer[] { -50, -40, -30, -30, -30, -30, -40, -50, -40, -20, 0, 5, 5, 0, -20, -40, -30, 5, 10, 15,
+			15, 10, 5, -30, -30, 0, 15, 20, 20, 15, 0, -30, -30, 5, 15, 20, 20, 15, 5, -30, -30, 0, 10, 15, 15, 10, 0, -30, -40, -20, 0, 0, 0, 0,
+			-20, -40, -50, -40, -30, -30, -30, -30, -40, -50, };
 
-	private static Integer[] BISHOP_TABLE = new Integer[]
-			{
-		-20,-10,-10,-10,-10,-10,-10,-20,
-		-10,  5,  0,  0,  0,  0,  5,-10,
-		-10, 10, 10, 10, 10, 10, 10,-10,
-		-10,  0, 10, 10, 10, 10,  0,-10,
-		-10,  5,  5, 10, 10,  5,  5,-10,
-		-10,  0,  5, 10, 10,  5,  0,-10,
-		-10,  0,  0,  0,  0,  0,  0,-10,
-		-20,-10,-10,-10,-10,-10,-10,-20,
-			};
-	private static Integer[] ROOK_TABLE = new Integer[]
-			{
-		0,  0,  0,  5,  5,  0,  0,  0,
-		-5,  0,  0,  0,  0,  0,  0, -5,
-		-5,  0,  0,  0,  0,  0,  0, -5,
-		-5,  0,  0,  0,  0,  0,  0, -5,
-		-5,  0,  0,  0,  0,  0,  0, -5,
-		-5,  0,  0,  0,  0,  0,  0, -5,
-		5, 10, 10, 10, 10, 10, 10,  5,
-		0,  0,  0,  0,  0,  0,  0,  0,
-			};
-	private static Integer[] QUEEN_TABLE = new Integer[]
-			{
-		-20,-10,-10, -5, -5,-10,-10,-20,
-		-10,  0,  5,  0,  0,  0,  0,-10,
-		-10,  5,  5,  5,  5,  5,  0,-10,
-		0,  0,  5,  5,  5,  5,  0, -5,
-		-5,  0,  5,  5,  5,  5,  0, -5,
-		-10,  0,  5,  5,  5,  5,  0,-10,
-		-10,  0,  0,  0,  0,  0,  0,-10,
-		-20,-10,-10, -5, -5,-10,-10,-20,
-			};
+	private static Integer[] BISHOP_TABLE = new Integer[] { -20, -10, -10, -10, -10, -10, -10, -20, -10, 5, 0, 0, 0, 0, 5, -10, -10, 10, 10, 10, 10,
+			10, 10, -10, -10, 0, 10, 10, 10, 10, 0, -10, -10, 5, 5, 10, 10, 5, 5, -10, -10, 0, 5, 10, 10, 5, 0, -10, -10, 0, 0, 0, 0, 0, 0, -10, -20,
+			-10, -10, -10, -10, -10, -10, -20, };
+	private static Integer[] ROOK_TABLE = new Integer[] { 0, 0, 0, 5, 5, 0, 0, 0, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0,
+			0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, -5, 0, 0, 0, 0, 0, 0, -5, 5, 10, 10, 10, 10, 10, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, };
+	private static Integer[] QUEEN_TABLE = new Integer[] { -20, -10, -10, -5, -5, -10, -10, -20, -10, 0, 5, 0, 0, 0, 0, -10, -10, 5, 5, 5, 5, 5, 0,
+			-10, 0, 0, 5, 5, 5, 5, 0, -5, -5, 0, 5, 5, 5, 5, 0, -5, -10, 0, 5, 5, 5, 5, 0, -10, -10, 0, 0, 0, 0, 0, 0, -10, -20, -10, -10, -5, -5,
+			-10, -10, -20, };
 
-	private static Integer[] KING_MIDDLE_GAME_TABLE = new Integer[]
-			{
-		20, 30, 10,  0,  0, 10, 30, 20,
-		20, 20,  0,  0,  0,  0, 20, 20,
-		-10,-20,-20,-20,-20,-20,-20,-10,
-		-20,-30,-30,-40,-40,-30,-30,-20,
-		-30,-40,-40,-50,-50,-40,-40,-30,
-		-30,-40,-40,-50,-50,-40,-40,-30,
-		-30,-40,-40,-50,-50,-40,-40,-30,
-		-30,-40,-40,-50,-50,-40,-40,-30,
-			};
+	private static Integer[] KING_MIDDLE_GAME_TABLE = new Integer[] { 20, 30, 10, 0, 0, 10, 30, 20, 20, 20, 0, 0, 0, 0, 20, 20, -10, -20, -20, -20,
+			-20, -20, -20, -10, -20, -30, -30, -40, -40, -30, -30, -20, -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40,
+			-30, -30, -40, -40, -50, -50, -40, -40, -30, -30, -40, -40, -50, -50, -40, -40, -30, };
 
-	private static Integer[] KING_END_GAME_TABLE = new Integer[]
-			{
-		-50,-30,-30,-30,-30,-30,-30,-50,
-		-30,-30,  0,  0,  0,  0,-30,-30,
-		-30,-10, 20, 30, 30, 20,-10,-30,
-		-30,-10, 30, 40, 40, 30,-10,-30,
-		-30,-10, 30, 40, 40, 30,-10,-30,
-		-30,-10, 20, 30, 30, 20,-10,-30,
-		-30,-20,-10,  0,  0,-10,-20,-30,
-		-50,-40,-30,-20,-20,-30,-40,-50,
-			};
-	//@formatter:on
+	private static Integer[] KING_END_GAME_TABLE = new Integer[] { -50, -30, -30, -30, -30, -30, -30, -50, -30, -30, 0, 0, 0, 0, -30, -30, -30, -10,
+			20, 30, 30, 20, -10, -30, -30, -10, 30, 40, 40, 30, -10, -30, -30, -10, 30, 40, 40, 30, -10, -30, -30, -10, 20, 30, 30, 20, -10, -30,
+			-30, -20, -10, 0, 0, -10, -20, -30, -50, -40, -30, -20, -20, -30, -40, -50, };
+	// @formatter:on
 	@SuppressWarnings("serial")
 	private static final Map<PieceType, Integer[]> TYPE_TO_TABLE = Collections.unmodifiableMap(new HashMap<PieceType, Integer[]>() {
 		{
@@ -143,8 +86,8 @@ public class ChessAI {
 			doMove(second, o2);
 
 			// best moves lowest
-			return evaluate(before, second) - evaluate(before, first);
-		});
+				return evaluate(before, second) - evaluate(before, first);
+			});
 		return validMoves.get(0);
 	}
 
@@ -162,13 +105,14 @@ public class ChessAI {
 	}
 
 	/**
-	 * Returns an evaluation score of how the second board is relative to the first. Higher is better, lower is worse.
+	 * Returns an evaluation score of how the second board is relative to the
+	 * first. Higher is better, lower is worse.
 	 *
 	 * @param first
 	 * @param second
 	 * @return
 	 */
-	private static int evaluate(final GamePiece[][] first, final GamePiece[][] second) {
+	public static int evaluate(final GamePiece[][] first, final GamePiece[][] second) {
 		return material(first, second) + pieceSquareTables(first, second);
 	}
 
